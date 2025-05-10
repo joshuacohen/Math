@@ -7,5 +7,5 @@ project(Math)
 	target_include_directories(Math PUBLIC inc)
 
 	add_executable(tests test/TestMain.cpp)
-	target_include_directories(tests PUBLIC tests/inc)
+	target_include_directories(tests PUBLIC test/inc)
 	target_link_libraries(tests Math)
