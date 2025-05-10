@@ -23,7 +23,7 @@ jobs:
       run: cmake -S . -B build
 
     - name: Build project
-      run: cmake --build build --config Debug --verbose
+      run: cmake --build build --config Debug
 
     - name: Run doctest tests
-      run: ./build/MathTests.elf
+      run: ./build/MathTests
