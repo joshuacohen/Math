@@ -31,3 +31,48 @@ jobs:
     - name: Build release
       run: cmake --build build --config Release --target MathTests
 
+  build-gcc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y cmake gcc
+
+    - name: Configure CMake
+      run: cmake -S . -B build
+
+    - name: Build debug
+      run: cmake --build build --config Debug --target MathTests
+
+    - name: Run doctest tests
+      run: ./build/MathTests
+
+    - name: Build release
+      run: cmake --build build --config Release --target MathTests
+
+  build-win:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' --yes
+
+    - name: Configure CMake
+      run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+
+    - name: Build debug
+      run: cmake --build build --config Debug
+
+    - name: Run doctest tests
+      run: ./build/Debug/MathTests.exe
+
+    - name: Build release
+      run: cmake --build build --config Release
