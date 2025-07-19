@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  build-clang:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,8 +22,12 @@ jobs:
     - name: Configure CMake
       run: cmake -S . -B build -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++
 
-    - name: Build project
+    - name: Build debug
       run: cmake --build build --config Debug --target MathTests
 
     - name: Run doctest tests
       run: ./build/MathTests
+
+    - name: Build release
+      run: cmake --build build --config Release --target MathTests
+

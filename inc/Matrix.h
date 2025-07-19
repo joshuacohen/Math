@@ -27,9 +27,9 @@ namespace Math3D {
 		using col_t  = Matrix<T, 1, H>;
 
 		static constexpr size_t N = W * H;
-		static constexpr index_sequence Seq_Data = make_index_sequence<N>();
-		static constexpr index_sequence Seq_Row  = make_index_sequence<W>();
-		static constexpr index_sequence Seq_Col  = make_index_sequence<H>();
+		static constexpr index_sequence<N> Seq_Data = make_index_sequence<N>();
+		static constexpr index_sequence<W> Seq_Row  = make_index_sequence<W>();
+		static constexpr index_sequence<H> Seq_Col  = make_index_sequence<H>();
 
 		Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>);
 
@@ -189,7 +189,7 @@ namespace Math3D {
 	using Mat3f = Matrix<float, 3, 3>;
 	using Xformf = Matrix<float, 3, 4>;
 
-	constexpr Xformf Identity {
+	constexpr const Xformf Identity {
 		1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 1.0f,
