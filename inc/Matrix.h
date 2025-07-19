@@ -26,10 +26,10 @@ namespace Math3D {
 		using row_t  = Matrix<T, W, 1>;
 		using col_t  = Matrix<T, 1, H>;
 
-		static constexpr size_t N = W * H;
-		static constexpr index_sequence<N> Seq_Data = make_index_sequence<N>();
-		static constexpr index_sequence<W> Seq_Row  = make_index_sequence<W>();
-		static constexpr index_sequence<H> Seq_Col  = make_index_sequence<H>();
+		static constexpr const size_t N = W * H;
+		static constexpr const auto Seq_Data = make_index_sequence<N>();
+		static constexpr const auto Seq_Row  = make_index_sequence<W>();
+		static constexpr const auto Seq_Col  = make_index_sequence<H>();
 
 		Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>);
 
@@ -84,7 +84,7 @@ namespace Math3D {
 
 		template <class _T, size_t _W, size_t _H>
 		constexpr T dot(const Matrix<_T, _W, _H>& val) const {
-			static_assert(N == val.N);
+			static_assert(N == Matrix<_T, _W, _H>::N);
 			return inner_product_impl(val, Seq_Data);
 		}
 
