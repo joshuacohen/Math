@@ -23,7 +23,7 @@ jobs:
       run: cmake -S . -B build -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++
 
     - name: Build project
-      run: cmake --build build --config Debug --target tests
+      run: cmake --build build --config Debug --target MathTests
 
     - name: Run doctest tests
-      run: ./build/tests
+      run: ./build/MathTests
