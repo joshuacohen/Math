@@ -116,6 +116,10 @@ namespace Math3D {
 			);
 		}
 
+		constexpr T trace() const requires (W == H) {
+			return trace_impl(Seq_Row);
+		}
+
 
 		union {
 			array<T, N> arr;
@@ -179,6 +183,11 @@ namespace Math3D {
 		template <size_t ... Seq>
 		constexpr T magnitude_impl(const index_sequence<Seq...>&) const {
 			return sqrt((0 + ... + static_cast<T>(pow(arr[Seq], 2))));
+		}
+
+		template <size_t ... Seq>
+		constexpr T trace_impl(const index_sequence<Seq...>& seq) const {
+			return (0 + ... + data[Seq][Seq]);
 		}
 	};
 
