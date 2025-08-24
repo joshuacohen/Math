@@ -1,6 +1,9 @@
 #include "Quaternion.h"
 
 namespace Math3D {
+	 Quaternion::Quaternion(float _i, float _j, float _k, float _r)
+	 	: i(_i), j(_j), k(_k), r(_r) {}
+
 	Quaternion Quaternion::operator*(float f) {
 		return Quaternion(i * f, j * f, k * f, r * f);
 	}

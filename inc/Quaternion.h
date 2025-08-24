@@ -5,7 +5,7 @@ namespace Math3D {
 	class Quaternion {
 	public:
 		Quaternion() = default;
-		Quaternion(float i, float j, float k, float r);
+		Quaternion(float _i, float _j, float _k, float _r);
 		Quaternion(const Vec3f& axis, float angle);
 		Quaternion(const Xformf& rot);
 
@@ -38,7 +38,7 @@ namespace Math3D {
 	private:
 		union {
 			float vals[4];
-			float i, j, k, r;
+			struct {float i, j, k, r;};
 		};
 	};
 
