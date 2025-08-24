@@ -36,7 +36,10 @@ namespace Math3D {
 		float Mag() { return sqrt(this->Dot(*this)); }
 		
 	private:
-		float vals[4];
+		union {
+			float vals[4];
+			float i, j, k, r;
+		};
 	};
 
 	Quaternion Slerp(const Quaternion& A, const Quaternion& b, float t);
