@@ -13,4 +13,20 @@ namespace Math3D {
 			r * q.r - i * q.i - j * q.j - k * q.k
 		);
 	}
+
+	Quaternion Quaternion::operator+(const Quaternion& q) {
+		return Quaternion(i + q.i, j + q.j, k + q.k, r + q.r);
+	}
+
+	Quaternion Quaternion::operator+(float f) {
+		return Quaternion(i + f, j + f, k + f, r + f);
+	}
+
+	Quaternion Quaternion::operator-(const Quaternion& q) {
+		return Quaternion(i - q.i, j - q.j, k - q.k, r - q.r);
+	}
+
+	Quaternion Quaternion::operator-(float f) {
+		return Quaternion(i - f, j - f, k - f, r - f);
+	}
 }
