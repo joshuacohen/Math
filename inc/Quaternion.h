@@ -1,11 +1,12 @@
 #pragma once
 #include "Matrix.h"
+#include <cmath>
 
 namespace Math3D {
 	class Quaternion {
 	public:
 		Quaternion() = default;
-		Quaternion(float i, float j, float k, float r);
+		Quaternion(float _i, float _j, float _k, float _r);
 		Quaternion(const Vec3f& axis, float angle);
 		Quaternion(const Xformf& rot);
 
@@ -33,10 +34,13 @@ namespace Math3D {
 
 		Xformf ToRot();
 		float Dot(const Quaternion& q) { return this->vals[0] * q.vals[0] + this->vals[1] * q.vals[1] + this->vals[2] * q.vals[2] + this->vals[3] * q.vals[3]; };
-		float Mag() { return sqrt(this->Dot(*this)); }
+		float Mag() { return std::sqrt(this->Dot(*this)); }
 		
 	private:
-		float vals[4];
+		union {
+			float vals[4];
+			struct {float i, j, k, r;};
+		};
 	};
 
 	Quaternion Slerp(const Quaternion& A, const Quaternion& b, float t);
