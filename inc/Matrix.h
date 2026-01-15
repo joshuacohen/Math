@@ -46,6 +46,7 @@ namespace Math3D {
 		constexpr conditional_t<H == 1, T, row_t>& operator[](size_t i) { return vec[i]; }
 		constexpr conditional_t<H == 1, T, row_t> operator[](size_t i) const { return vec[i]; }
 		constexpr this_t operator+(const T& val) const { return scalar_add_impl(val, Seq_Data); }
+		constexpr this_t operator*(const T& val) const { return scalar_mul_impl(val, Seq_Data); }
 		constexpr this_t operator/(const T& val) const { return scalar_div_impl(val, Seq_Data); }
 
 
@@ -127,6 +128,11 @@ namespace Math3D {
 		template <size_t ... Seq>
 		constexpr this_t scalar_add_impl(const T& val, const index_sequence<Seq...>& = Seq_Data) const {
 			return {(arr[Seq] + val) ...};
+		}
+
+		template <size_t ... Seq>
+		constexpr this_t scalar_mul_impl(const T& val, const index_sequence<Seq...>& = Seq_Data) const {
+			return {(arr[Seq] * val) ...};
 		}
 
 		template <size_t ... Seq>

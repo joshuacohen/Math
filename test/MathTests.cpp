@@ -59,6 +59,11 @@ TEST_SUITE("Matrix") {
 		CHECK(++Vec3f() == Vec3f{1.0f, 1.0f, 1.0f});
 	}
 
+	TEST_CASE("Scalar multiplication") {
+		CHECK(Vec3f(1.0f, 2.0f, 3.0f) * 3.0f == Vec3f(3.0f, 6.0f, 9.0f));
+		CHECK(Vec3f(0.0f, 1.0f, -2.0f) * -2.5f == Vec3f(0.0f, -2.5f, 5.0f));
+	}
+
 	TEST_CASE("Vector addition") {
 		CHECK(Vec3f(1.0f, 1.0f, 1.0f) + Vec3f{2.0f, 2.0f, 2.0f} == Vec3f{3.0f, 3.0f, 3.0f});
 	}
