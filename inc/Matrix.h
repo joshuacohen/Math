@@ -3,36 +3,6 @@
 #include <type_traits>
 #include <utility>
 
-template<std::size_t Offset, typename Seq>
-struct offset_index_sequence;
-
-template<typename A, typename B>
-struct concat_index_sequence;
-
-template<std::size_t Offset, std::size_t... Is>
-struct offset_index_sequence<Offset, std::index_sequence<Is...>> {
-    using type = std::index_sequence<(Is + Offset)...>;
-};
-template<std::size_t Offset, typename Seq>
-using offset_index_sequence_t = typename offset_index_sequence<Offset, Seq>::type;
-
-template<std::size_t... A, std::size_t... B>
-struct concat_index_sequence<std::index_sequence<A...>, std::index_sequence<B...>> {
-    using type = std::index_sequence<A..., B...>;
-};
-
-template<typename A, typename B>
-using concat_index_sequence_t = typename concat_index_sequence<A, B>::type;
-
-template<std::size_t I, std::size_t N>
-struct remove_index_from_make_index_sequence {
-    static_assert(I < N);
-    using second = offset_index_sequence_t<I + 1, std::make_index_sequence<(N - I - 1)>>;
-    using type = concat_index_sequence_t<std::make_index_sequence<I>, second>;
-};
-template<std::size_t I, std::size_t N>
-using remove_index_from_make_index_sequence_t = typename remove_index_from_make_index_sequence<I, N>::type;
-
 namespace Math3D {
 	using namespace std;
 
@@ -160,22 +130,6 @@ namespace Math3D {
 			return remove_column_impl(i, Seq_Col);
 		}
 
-		template<size_t ... RowSeq>
-		constexpr Matrix<T, W - 1, H> remove_column_impl(size_t col_to_remove, const index_sequence<RowSeq...>&) const {
-			Matrix<T, W - 1, H> result;
-			((remove_column_impl_copy_row(result, RowSeq, col_to_remove)), ...);
-			return result;
-		}
-
-		constexpr void remove_column_impl_copy_row(Matrix<T, W - 1, H>& result, size_t row_idx, size_t col_to_remove) const {
-			remove_column_impl_copy_row_helper(result, row_idx, col_to_remove, make_index_sequence<W - 1>());
-		}
-
-		template<size_t ... NewColSeq>
-		constexpr void remove_column_impl_copy_row_helper(Matrix<T, W - 1, H>& result, size_t row_idx, size_t col_to_remove, const index_sequence<NewColSeq...>&) const {
-			((result.data[row_idx][NewColSeq] = data[row_idx][NewColSeq < col_to_remove ? NewColSeq : NewColSeq + 1]), ...);
-		}
-
 		union {
 			array<T, N> arr;
 			array<array<T, W>, H> data;
@@ -248,6 +202,18 @@ namespace Math3D {
 		template <size_t ... Seq>
 		constexpr T trace_impl(const index_sequence<Seq...>& seq) const {
 			return (0 + ... + data[Seq][Seq]);
+		}
+
+		template<size_t ... RowSeq>
+		constexpr Matrix<T, W - 1, H> remove_column_impl(size_t col_to_remove, const index_sequence<RowSeq...>&) const {
+			Matrix<T, W - 1, H> result;
+			((remove_column_impl_copy_row(result, RowSeq, col_to_remove, make_index_sequence<W - 1>())), ...);
+			return result;
+		}
+
+		template<size_t ... NewColSeq>
+		constexpr void remove_column_impl_copy_row(Matrix<T, W - 1, H>& result, size_t row_idx, size_t col_to_remove, const index_sequence<NewColSeq...>&) const {
+			((result.data[row_idx][NewColSeq] = data[row_idx][NewColSeq < col_to_remove ? NewColSeq : NewColSeq + 1]), ...);
 		}
 	};
 
