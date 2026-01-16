@@ -49,7 +49,6 @@ namespace Math3D {
 		constexpr this_t operator*(const T& val) const { return scalar_mul_impl(val, Seq_Data); }
 		constexpr this_t operator/(const T& val) const { return scalar_div_impl(val, Seq_Data); }
 
-
 		this_t& operator+=(const T& val) {
 			this_t& _this = *this;
 			_this = _this + val;
@@ -115,6 +114,12 @@ namespace Math3D {
 				vec[2] * val[0] - vec[0] * val[2],
 				vec[0] * val[1] - vec[1] * val[0]
 			);
+		}
+
+		constexpr T determinant() const requires (W == H) {
+			if constexpr (W == 2) {
+				return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+			}
 		}
 
 		constexpr T trace() const requires (W == H) {
