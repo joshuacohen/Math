@@ -206,7 +206,9 @@ namespace Math3D {
 	using Vec2f = Vec<float, 2>;
 	using Vec3f = Vec<float, 3>;
 	using Vec4f = Vec<float, 4>;
+	using Mat2f = Matrix<float, 2, 2>;
 	using Mat3f = Matrix<float, 3, 3>;
+	using Mat4f = Matrix<float, 4, 4>;
 	using Xformf = Matrix<float, 3, 4>;
 
 	constexpr const Xformf Identity {
