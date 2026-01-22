@@ -136,7 +136,6 @@ namespace Math3D {
 			return trace_impl(Seq_Row);
 		}
 
-		template<size_t ... RowSeq>
 		constexpr Matrix<T, W, H - 1> remove_row(size_t i) const {
 			return remove_row_impl(i, Seq_Row);
 		}
@@ -222,7 +221,7 @@ namespace Math3D {
 		template<size_t ... ColSeq>
 		constexpr Matrix<T, W, H - 1> remove_row_impl(size_t row, const index_sequence<ColSeq...>&) const {
 			Matrix<T, W, H - 1> result;
-			((remove_row_impl_inner(result, row, ColSeq, make_index_sequence<H - 1>())), ...);
+			((remove_row_impl_inner(result, ColSeq, row, make_index_sequence<W - 1>())), ...);
 			return result;
 		}
 
@@ -232,15 +231,15 @@ namespace Math3D {
 		}
 
 		template<size_t ... RowSeq>
-		constexpr Matrix<T, W - 1, H> remove_column_impl(size_t col_to_remove, const index_sequence<RowSeq...>&) const {
+		constexpr Matrix<T, W - 1, H> remove_column_impl(size_t col, const index_sequence<RowSeq...>&) const {
 			Matrix<T, W - 1, H> result;
-			((remove_column_impl_inner(result, RowSeq, col_to_remove, make_index_sequence<W - 1>())), ...);
+			((remove_column_impl_inner(result, RowSeq, col, make_index_sequence<W - 1>())), ...);
 			return result;
 		}
 
-		template<size_t ... NewColSeq>
-		constexpr void remove_column_impl_inner(Matrix<T, W - 1, H>& result, size_t row_idx, size_t col_to_remove, const index_sequence<NewColSeq...>&) const {
-			((result.data[row_idx][NewColSeq] = data[row_idx][NewColSeq < col_to_remove ? NewColSeq : NewColSeq + 1]), ...);
+		template<size_t ... ColSeq>
+		constexpr void remove_column_impl_inner(Matrix<T, W - 1, H>& result, size_t row, size_t col, const index_sequence<ColSeq...>&) const {
+			((result.data[row][ColSeq] = data[row][ColSeq < col ? ColSeq : ColSeq + 1]), ...);
 		}
 
 		template<size_t ... Seq>
