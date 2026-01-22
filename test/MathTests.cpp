@@ -136,6 +136,28 @@ TEST_SUITE("Matrix") {
 		CHECK(before.remove_column(2) == after);
 	}
 
+	// TODO Test case for row removal
+
+	TEST_CASE("Determinant") {
+		CHECK(Mat2f {
+			3.0f, 8.0f,
+			4.0f, 6.0f,
+		}.determinant() == -14);
+
+		CHECK(Mat3f {
+			1.0f, 3.0f, 2.0f,
+			4.0f, 1.0f, 3.0f,
+			2.0f, 5.0f, 2.0f,
+		}.determinant() == 17);
+
+		CHECK(Mat4f {
+			2.0f, 1.0f, 3.0f, 4.0f,
+			0.0f, -1.0f, 2.0f, 1.0f,
+			3.0f, 2.0f, 0.0f, 5.0f,
+			-1.0f, 3.0f, 2.0f, 1.0f,
+		}.determinant() == 35);
+	}
+
 	TEST_CASE("Trace") {
 		CHECK(
 			Mat3f {

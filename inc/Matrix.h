@@ -117,8 +117,14 @@ namespace Math3D {
 		}
 
 		constexpr T determinant() const requires (W == H) {
-			if constexpr (W == 2) {
+			if constexpr (W == 1) {
+				return data[0][0];
+			} 
+			else if constexpr (W == 2) {
 				return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+			} 
+			else {
+				return determinant_inner(Seq_Row);
 			}
 		}
 
@@ -205,6 +211,13 @@ namespace Math3D {
 		}
 
 		template<size_t ... RowSeq>
+		constexpr Matrix<T, W, H - 1> remove_first_row(const index_sequence<RowSeq...>&) const {
+			Matrix<T, W, H - 1> result;
+			((result.data[RowSeq] = data[RowSeq + 1]), ...);
+			return result;
+		}
+
+		template<size_t ... RowSeq>
 		constexpr Matrix<T, W - 1, H> remove_column_impl(size_t col_to_remove, const index_sequence<RowSeq...>&) const {
 			Matrix<T, W - 1, H> result;
 			((remove_column_impl_copy_row(result, RowSeq, col_to_remove, make_index_sequence<W - 1>())), ...);
@@ -214,6 +227,17 @@ namespace Math3D {
 		template<size_t ... NewColSeq>
 		constexpr void remove_column_impl_copy_row(Matrix<T, W - 1, H>& result, size_t row_idx, size_t col_to_remove, const index_sequence<NewColSeq...>&) const {
 			((result.data[row_idx][NewColSeq] = data[row_idx][NewColSeq < col_to_remove ? NewColSeq : NewColSeq + 1]), ...);
+		}
+
+		template<size_t ... Seq>
+		constexpr T determinant_inner(const index_sequence<Seq...>&) const {
+			auto minor_base = remove_first_row(make_index_sequence<H - 1>());
+			
+			return ((
+				minor_base.remove_column(Seq).determinant() // Minor
+				* data[0][Seq] // Cofactor
+				* ((Seq % 2) ? -1 : 1) // Sign
+			) + ... + 0);
 		}
 	};
 
