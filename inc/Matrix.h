@@ -49,7 +49,6 @@ namespace Math3D {
 		constexpr this_t operator*(const T& val) const { return scalar_mul_impl(val, Seq_Data); }
 		constexpr this_t operator/(const T& val) const { return scalar_div_impl(val, Seq_Data); }
 
-
 		this_t& operator+=(const T& val) {
 			this_t& _this = *this;
 			_this = _this + val;
@@ -232,10 +231,13 @@ namespace Math3D {
 
 		template<size_t ... Seq>
 		constexpr T determinant_inner(const index_sequence<Seq...>&) const {
-			return (
-				(((Seq % 2) ? -1 : 1) * data[0][Seq] 
-				* remove_first_row(make_index_sequence<H - 1>()).remove_column(Seq).determinant()) + ... + 0)
-			;
+			auto minor_base = remove_first_row(make_index_sequence<H - 1>());
+			
+			return ((
+				minor_base.remove_column(Seq).determinant() // Minor
+				* data[0][Seq] // Cofactor
+				* ((Seq % 2) ? -1 : 1) // Sign
+			) + ... + 0);
 		}
 	};
 
