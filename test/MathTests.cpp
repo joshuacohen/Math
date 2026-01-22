@@ -167,4 +167,18 @@ TEST_SUITE("Matrix") {
 			}.trace() == 5.0f
 		);
 	}
+
+	TEST_CASE("Transpose") {
+		CHECK(
+			Matrix<int, 3, 2> {
+				2, 5, 3,
+				4, 7, 0,
+			}.transpose() == 
+			Matrix<int, 2, 3> {
+				2, 4,
+				5, 7,
+				3, 0,
+			}
+		);
+	}
 }

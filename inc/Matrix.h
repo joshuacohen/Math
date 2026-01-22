@@ -128,6 +128,10 @@ namespace Math3D {
 			}
 		}
 
+		constexpr Matrix<T, H, W> transpose() {
+			return transpose_impl(Seq_Row);
+		}
+
 		constexpr T trace() const requires (W == H) {
 			return trace_impl(Seq_Row);
 		}
@@ -238,6 +242,17 @@ namespace Math3D {
 				* data[0][Seq] // Cofactor
 				* ((Seq % 2) ? -1 : 1) // Sign
 			) + ... + 0);
+		}
+
+		template<size_t ... Seq>
+		constexpr Matrix<T, H, W> transpose_impl(const index_sequence<Seq...>&) const {
+			Matrix<T, H, W> result;
+			((result.vec[Seq] = transpose_impl_inner(Seq, Seq_Col)), ...);
+			return result;
+		}
+
+		template<size_t ... Seq> constexpr Matrix<T, H, 1> transpose_impl_inner(size_t i, const index_sequence<Seq...>&) const {
+			return Matrix<T, H, 1>(data[Seq][i] ...);
 		}
 	};
 
