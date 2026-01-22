@@ -136,6 +136,11 @@ namespace Math3D {
 			return trace_impl(Seq_Row);
 		}
 
+		template<size_t ... RowSeq>
+		constexpr Matrix<T, W, H - 1> remove_row(size_t i) const {
+			return remove_row_impl(i, Seq_Row);
+		}
+
 		constexpr Matrix<T, W - 1, H> remove_column(size_t i) const {
 			return remove_column_impl(i, Seq_Col);
 		}
@@ -214,28 +219,33 @@ namespace Math3D {
 			return (0 + ... + data[Seq][Seq]);
 		}
 
-		template<size_t ... RowSeq>
-		constexpr Matrix<T, W, H - 1> remove_first_row(const index_sequence<RowSeq...>&) const {
+		template<size_t ... ColSeq>
+		constexpr Matrix<T, W, H - 1> remove_row_impl(size_t row, const index_sequence<ColSeq...>&) const {
 			Matrix<T, W, H - 1> result;
-			((result.data[RowSeq] = data[RowSeq + 1]), ...);
+			((remove_row_impl_inner(result, row, ColSeq, make_index_sequence<H - 1>())), ...);
 			return result;
+		}
+
+		template<size_t ... NewRowSeq>
+		constexpr void remove_row_impl_inner(Matrix<T, W, H - 1>& result, size_t row_to_remove, size_t col, const index_sequence<NewRowSeq...>&) const {
+			((result.data[NewRowSeq][col] = data[NewRowSeq < row_to_remove ? NewRowSeq : NewRowSeq + 1][col]), ...);
 		}
 
 		template<size_t ... RowSeq>
 		constexpr Matrix<T, W - 1, H> remove_column_impl(size_t col_to_remove, const index_sequence<RowSeq...>&) const {
 			Matrix<T, W - 1, H> result;
-			((remove_column_impl_copy_row(result, RowSeq, col_to_remove, make_index_sequence<W - 1>())), ...);
+			((remove_column_impl_inner(result, RowSeq, col_to_remove, make_index_sequence<W - 1>())), ...);
 			return result;
 		}
 
 		template<size_t ... NewColSeq>
-		constexpr void remove_column_impl_copy_row(Matrix<T, W - 1, H>& result, size_t row_idx, size_t col_to_remove, const index_sequence<NewColSeq...>&) const {
+		constexpr void remove_column_impl_inner(Matrix<T, W - 1, H>& result, size_t row_idx, size_t col_to_remove, const index_sequence<NewColSeq...>&) const {
 			((result.data[row_idx][NewColSeq] = data[row_idx][NewColSeq < col_to_remove ? NewColSeq : NewColSeq + 1]), ...);
 		}
 
 		template<size_t ... Seq>
 		constexpr T determinant_inner(const index_sequence<Seq...>&) const {
-			auto minor_base = remove_first_row(make_index_sequence<H - 1>());
+			auto minor_base = remove_row(0);
 			
 			return ((
 				minor_base.remove_column(Seq).determinant() // Minor
