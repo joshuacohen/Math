@@ -117,6 +117,18 @@ namespace Math3D {
 			);
 		}
 
+		constexpr T determinant() const requires (W == H) {
+			if constexpr (W == 1) {
+				return data[0][0];
+			} 
+			else if constexpr (W == 2) {
+				return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+			} 
+			else {
+				return determinant_inner(Seq_Row);
+			}
+		}
+
 		constexpr T trace() const requires (W == H) {
 			return trace_impl(Seq_Row);
 		}
@@ -218,6 +230,13 @@ namespace Math3D {
 			((result.data[row_idx][NewColSeq] = data[row_idx][NewColSeq < col_to_remove ? NewColSeq : NewColSeq + 1]), ...);
 		}
 
+		template<size_t ... Seq>
+		constexpr T determinant_inner(const index_sequence<Seq...>&) const {
+			return (
+				(((Seq % 2) ? -1 : 1) * data[0][Seq] 
+				* remove_first_row(make_index_sequence<H - 1>()).remove_column(Seq).determinant()) + ... + 0)
+			;
+		}
 	};
 
 	template<typename T, size_t W> using Vec = Matrix<T, W, 1>;
