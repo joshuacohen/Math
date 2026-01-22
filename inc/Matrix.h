@@ -200,6 +200,13 @@ namespace Math3D {
 		}
 
 		template<size_t ... RowSeq>
+		constexpr Matrix<T, W, H - 1> remove_first_row(const index_sequence<RowSeq...>&) const {
+			Matrix<T, W, H - 1> result;
+			((result.data[RowSeq] = data[RowSeq + 1]), ...);
+			return result;
+		}
+
+		template<size_t ... RowSeq>
 		constexpr Matrix<T, W - 1, H> remove_column_impl(size_t col_to_remove, const index_sequence<RowSeq...>&) const {
 			Matrix<T, W - 1, H> result;
 			((remove_column_impl_copy_row(result, RowSeq, col_to_remove, make_index_sequence<W - 1>())), ...);

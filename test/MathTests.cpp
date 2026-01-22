@@ -136,6 +136,9 @@ TEST_SUITE("Matrix") {
 		CHECK(before.remove_column(2) == after);
 	}
 
+	// TODO Test case for row removal
+
+
 	TEST_CASE("Trace") {
 		CHECK(
 			Mat3f {
