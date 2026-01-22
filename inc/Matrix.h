@@ -121,6 +121,9 @@ namespace Math3D {
 			return trace_impl(Seq_Row);
 		}
 
+		constexpr Matrix<T, W - 1, H> remove_column(size_t i) const {
+			return remove_column_impl(i, Seq_Col);
+		}
 
 		union {
 			array<T, N> arr;
@@ -195,6 +198,19 @@ namespace Math3D {
 		constexpr T trace_impl(const index_sequence<Seq...>& seq) const {
 			return (0 + ... + data[Seq][Seq]);
 		}
+
+		template<size_t ... RowSeq>
+		constexpr Matrix<T, W - 1, H> remove_column_impl(size_t col_to_remove, const index_sequence<RowSeq...>&) const {
+			Matrix<T, W - 1, H> result;
+			((remove_column_impl_copy_row(result, RowSeq, col_to_remove, make_index_sequence<W - 1>())), ...);
+			return result;
+		}
+
+		template<size_t ... NewColSeq>
+		constexpr void remove_column_impl_copy_row(Matrix<T, W - 1, H>& result, size_t row_idx, size_t col_to_remove, const index_sequence<NewColSeq...>&) const {
+			((result.data[row_idx][NewColSeq] = data[row_idx][NewColSeq < col_to_remove ? NewColSeq : NewColSeq + 1]), ...);
+		}
+
 	};
 
 	template<typename T, size_t W> using Vec = Matrix<T, W, 1>;

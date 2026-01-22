@@ -118,6 +118,24 @@ TEST_SUITE("Matrix") {
 		CHECK(Vec3f(3.0f, 4.0f, 0.0f).normalize() == Vec3f(3.0f / 5.0f, 4.0f / 5.0f, 0.0f));
 	}
 
+	TEST_CASE("Column Removal") {
+		Mat4f before {
+			1.0f, 2.0f, 3.0f, 4.0f,
+			2.0f, 3.0f, 4.0f, 1.0f,
+			3.0f, 4.0f, 1.0f, 2.0f,
+			4.0f, 1.0f, 2.0f, 3.0f,
+		};
+
+		Xformf after {
+			1.0f, 2.0f, 4.0f,
+			2.0f, 3.0f, 1.0f,
+			3.0f, 4.0f, 2.0f,
+			4.0f, 1.0f, 3.0f,
+		};
+
+		CHECK(before.remove_column(2) == after);
+	}
+
 	TEST_CASE("Trace") {
 		CHECK(
 			Mat3f {
