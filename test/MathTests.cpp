@@ -136,7 +136,20 @@ TEST_SUITE("Matrix") {
 		CHECK(before.remove_column(2) == after);
 	}
 
-	// TODO Test case for row removal
+	TEST_CASE("Row Removal") {
+		Mat3f before {
+			1.0f, 3.0f, 2.0f,
+			4.0f, 1.0f, 3.0f,
+			2.0f, 5.0f, 2.0f,
+		};
+
+		Matrix<float, 3, 2> after {
+			4.0f, 1.0f, 3.0f,
+			2.0f, 5.0f, 2.0f,
+		};
+
+		CHECK(before.remove_row(0) == after);
+	}
 
 	TEST_CASE("Determinant") {
 		CHECK(Mat2f {

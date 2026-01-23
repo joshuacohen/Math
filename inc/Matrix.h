@@ -221,7 +221,7 @@ namespace Math3D {
 		template<size_t ... ColSeq>
 		constexpr Matrix<T, W, H - 1> remove_row_impl(size_t row, const index_sequence<ColSeq...>&) const {
 			Matrix<T, W, H - 1> result;
-			((remove_row_impl_inner(result, ColSeq, row, make_index_sequence<W - 1>())), ...);
+			((remove_row_impl_inner(result, row, ColSeq, make_index_sequence<W - 1>())), ...);
 			return result;
 		}
 
