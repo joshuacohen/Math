@@ -124,7 +124,7 @@ namespace Math3D {
 				return data[0][0] * data[1][1] - data[0][1] * data[1][0];
 			} 
 			else {
-				return determinant_inner(Seq_Row);
+				return determinant_impl(Seq_Row);
 			}
 		}
 
@@ -142,6 +142,10 @@ namespace Math3D {
 
 		constexpr Matrix<T, W - 1, H> remove_column(size_t i) const {
 			return remove_column_impl(i, Seq_Col);
+		}
+
+		constexpr this_t adjoint() const {
+			return adjoint_impl(Seq_Row, Seq_Col);
 		}
 
 		union {
@@ -221,7 +225,7 @@ namespace Math3D {
 		template<size_t ... ColSeq>
 		constexpr Matrix<T, W, H - 1> remove_row_impl(size_t row, const index_sequence<ColSeq...>&) const {
 			Matrix<T, W, H - 1> result;
-			((remove_row_impl_inner(result, row, ColSeq, make_index_sequence<W - 1>())), ...);
+			((remove_row_impl_inner(result, row, ColSeq, make_index_sequence<H - 1>())), ...);
 			return result;
 		}
 
@@ -243,7 +247,7 @@ namespace Math3D {
 		}
 
 		template<size_t ... Seq>
-		constexpr T determinant_inner(const index_sequence<Seq...>&) const {
+		constexpr T determinant_impl(const index_sequence<Seq...>&) const {
 			auto minor_base = remove_row(0);
 			
 			return ((
@@ -260,8 +264,25 @@ namespace Math3D {
 			return result;
 		}
 
-		template<size_t ... Seq> constexpr Matrix<T, H, 1> transpose_impl_inner(size_t i, const index_sequence<Seq...>&) const {
+		template<size_t ... Seq>
+		constexpr Matrix<T, H, 1> transpose_impl_inner(size_t i, const index_sequence<Seq...>&) const {
 			return Matrix<T, H, 1>(data[Seq][i] ...);
+		}
+
+		template <size_t ... RowSeq, size_t ... ColSeq>
+		constexpr this_t adjoint_impl(const index_sequence<RowSeq...>&, const index_sequence<ColSeq...>&) const {
+			return cofactor_matrix_impl(Seq_Data);
+		}
+
+		template <size_t ... DataSeq>
+		constexpr this_t cofactor_matrix_impl(const index_sequence<DataSeq...>&) const {
+			// Compute flattened adjoint by mapping linear index to (row, col) pairs
+			// Adjoint is transpose of cofactor, so for linear index i:
+			// adjoint[i/W][i%W] = cofactor[i%W][i/W] = (-1)^(i%W + i/W) * det(minor(i%W, i/W))
+			return this_t((
+				remove_row(DataSeq % W).remove_column(DataSeq / W).determinant() 
+					* ((DataSeq % W + DataSeq / W) % 2 ? -1 : 1)
+			) ...);
 		}
 	};
 

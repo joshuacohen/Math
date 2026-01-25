@@ -194,4 +194,86 @@ TEST_SUITE("Matrix") {
 			}
 		);
 	}
+
+	TEST_CASE("Adjoint") {
+		Matrix<int, 3, 3> before {
+			-1, -2, -2,
+			2, 1, -2,
+			2, -2, 1
+		};
+
+		Matrix<int, 3, 3> after {
+			-3, 6, 6,
+			-6, 3, -6,
+			-6, -6, 3
+		};
+
+		CHECK(before.adjoint() == after);
+	}
+
+	TEST_CASE("Adjoint 2x2") {
+		Mat2f mat {
+			3.0f, 8.0f,
+			4.0f, 6.0f,
+		};
+
+		Mat2f expected {
+			6.0f, -8.0f,
+			-4.0f, 3.0f,
+		};
+
+		CHECK(mat.adjoint() == expected);
+	}
+
+	TEST_CASE("Adjoint Identity") {
+		// adj(I) = I
+		Mat3f identity {
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,
+		};
+
+		CHECK(identity.adjoint() == identity);
+	}
+
+	TEST_CASE("Adjoint 4x4") {
+		Mat4f mat {
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 2.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 3.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 4.0f,
+		};
+
+		// For diagonal matrices, adjoint is also diagonal with pattern:
+		// adj(D)[i,i] = det(D) / D[i,i]
+		// det(D) = 1*2*3*4 = 24
+		Mat4f expected {
+			24.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 12.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 8.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 6.0f,
+		};
+
+		CHECK(mat.adjoint() == expected);
+	}
+
+	TEST_CASE("Adjoint Property: adj(A) * A = det(A) * I") {
+		Mat3f mat {
+			1.0f, 3.0f, 2.0f,
+			4.0f, 1.0f, 3.0f,
+			2.0f, 5.0f, 2.0f,
+		};
+
+		float det = mat.determinant();
+		Mat3f adj = mat.adjoint();
+		Mat3f product = adj * mat;
+
+		// adj(A) * A should equal det(A) * I
+		Mat3f expected = Mat3f(det) * 0.0f;
+		expected[0][0] = det;
+		expected[1][1] = det;
+		expected[2][2] = det;
+
+		CHECK(product == expected);
+	}
 }
