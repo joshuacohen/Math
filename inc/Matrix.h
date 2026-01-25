@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <array>
 #include <type_traits>
 #include <utility>
@@ -146,6 +147,13 @@ namespace Math3D {
 
 		constexpr this_t adjoint() const {
 			return adjoint_impl(Seq_Row, Seq_Col);
+		}
+
+		constexpr this_t inverse() const {
+			T det = determinant();
+			assert(det != 0);
+
+			return adjoint() * (1 / det);
 		}
 
 		union {

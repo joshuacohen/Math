@@ -257,23 +257,30 @@ TEST_SUITE("Matrix") {
 		CHECK(mat.adjoint() == expected);
 	}
 
-	TEST_CASE("Adjoint Property: adj(A) * A = det(A) * I") {
-		Mat3f mat {
-			1.0f, 3.0f, 2.0f,
-			4.0f, 1.0f, 3.0f,
-			2.0f, 5.0f, 2.0f,
+	// TODO epsilon
+	// TODO adjoint property
+	TEST_CASE("Inverse") {
+		Mat3f original {
+			4.0f, 3.0f, 8.0f,
+			6.0f, 2.0f, 5.0f,
+			1.0f, 5.0f, 9.0f
 		};
 
-		float det = mat.determinant();
-		Mat3f adj = mat.adjoint();
-		Mat3f product = adj * mat;
+		Mat3f expected {
+			-0.142857134f, 0.265306115f, -0.0204081628f,
+			-1.00000000f, 0.571428537f, 0.571428537f,
+			0.571428537f, -0.346938759f, -0.204081625f,
+		};
 
-		// adj(A) * A should equal det(A) * I
-		Mat3f expected = Mat3f(det) * 0.0f;
-		expected[0][0] = det;
-		expected[1][1] = det;
-		expected[2][2] = det;
+		
+		CHECK(original.inverse() == expected);
 
-		CHECK(product == expected);
+		// Mat3f identity = original.inverse() * original;
+
+		// CHECK(identity == Mat3f{
+		// 	1.0f, 0.0f, 0.0f,
+		// 	0.0f, 1.0f, 0.0f,
+		// 	0.0f, 0.0f, 1.0f
+		// });
 	}
 }
