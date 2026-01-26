@@ -260,27 +260,21 @@ TEST_SUITE("Matrix") {
 	// TODO epsilon
 	// TODO adjoint property
 	TEST_CASE("Inverse") {
-		Mat3f original {
+		Mat3f before {
 			4.0f, 3.0f, 8.0f,
 			6.0f, 2.0f, 5.0f,
 			1.0f, 5.0f, 9.0f
 		};
 
-		Mat3f expected {
-			-0.142857134f, 0.265306115f, -0.0204081628f,
-			-1.00000000f, 0.571428537f, 0.571428537f,
-			0.571428537f, -0.346938759f, -0.204081625f,
+		Mat3f inv = before.inverse();
+
+		Mat3f after {
+			-(1.0f/7.0f), 13.0f/49.0f,    -(1.0f/49.0f),
+			-1.0f, 		  4.0f/7.0f,      4.0f/7.0f,
+			4.0f/7.0f,    -(17.0f/49.0f), -(10.0f/49.0f)
 		};
 
-		
-		CHECK(original.inverse() == expected);
-
-		// Mat3f identity = original.inverse() * original;
-
-		// CHECK(identity == Mat3f{
-		// 	1.0f, 0.0f, 0.0f,
-		// 	0.0f, 1.0f, 0.0f,
-		// 	0.0f, 0.0f, 1.0f
-		// });
+		CHECK(inv.nearly_equal(after));
+		CHECK(Mat3f { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,}.nearly_equal(before * before.inverse()));
 	}
 }
