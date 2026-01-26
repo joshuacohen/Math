@@ -3,6 +3,11 @@
 #include <array>
 #include <type_traits>
 #include <utility>
+#include <limits>
+
+// This is some bullshit
+// #define EPSILON numeric_limits<T>::epsilon()
+#define EPSILON 1e-06F
 
 namespace Math3D {
 	using namespace std;
@@ -14,6 +19,11 @@ namespace Math3D {
 	template <typename T>
 	constexpr T lerp(const T& a, const T& b, float t) {
 		return (1 - t) * a + t * b;
+	}
+
+	template <typename T>
+	bool nearly_equal(const T& lhs, const T& rhs) {
+		return std::abs(lhs - rhs) < EPSILON;
 	}
 
 	template<class T, class ... ArgTypes>
@@ -49,6 +59,10 @@ namespace Math3D {
 		constexpr this_t operator+(const T& val) const { return scalar_add_impl(val, Seq_Data); }
 		constexpr this_t operator*(const T& val) const { return scalar_mul_impl(val, Seq_Data); }
 		constexpr this_t operator/(const T& val) const { return scalar_div_impl(val, Seq_Data); }
+
+		constexpr bool nearly_equal(const this_t& rhs) {
+			return nearly_equal_impl(rhs, Seq_Data);
+		}
 
 		this_t& operator+=(const T& val) {
 			this_t& _this = *this;
@@ -291,6 +305,12 @@ namespace Math3D {
 				remove_row(DataSeq % W).remove_column(DataSeq / W).determinant() 
 					* ((DataSeq % W + DataSeq / W) % 2 ? -1 : 1)
 			) ...);
+		}
+
+		template<size_t ... Seq>
+		constexpr bool nearly_equal_impl(const this_t& rhs, const index_sequence<Seq...>&) {
+			bool result = (Math3D::nearly_equal(arr[Seq], rhs.arr[Seq]) && ...);
+			return result;
 		}
 	};
 
