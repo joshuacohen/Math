@@ -36,6 +36,7 @@ namespace Math3D {
 		float Dot(const Quaternion& q) const { return this->vals[0] * q.vals[0] + this->vals[1] * q.vals[1] + this->vals[2] * q.vals[2] + this->vals[3] * q.vals[3]; };
 		float Mag() const { return std::sqrt(this->Dot(*this)); }
 		Quaternion Normalize() const { return (*this) / Mag(); }
+		Quaternion Conjugate() const { return Quaternion(i, -j, -k, -r); }
 		
 	private:
 		union {
