@@ -32,4 +32,16 @@ namespace Math3D {
 	Quaternion Quaternion::operator-(float f) const {
 		return Quaternion(i - f, j - f, k - f, r - f);
 	}
+
+	Quaternion Quaternion::operator/(float f) const {
+		return Quaternion(i / f, j / f, k / f, r / f);
+	}
+
+	Quaternion operator/(const Quaternion& q, float f) {
+		return q.operator/(f);
+	}
+
+	Quaternion operator/(float f, const Quaternion& q) {
+		return q.operator/(f);
+	}
 }
