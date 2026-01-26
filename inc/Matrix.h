@@ -3,7 +3,7 @@
 #include <array>
 #include <type_traits>
 #include <utility>
-#include <limits>
+#include <cstdlib>
 
 // This is some bullshit
 // #define EPSILON numeric_limits<T>::epsilon()
@@ -23,7 +23,7 @@ namespace Math3D {
 
 	template <typename T>
 	bool nearly_equal(const T& lhs, const T& rhs) {
-		return std::abs(lhs - rhs) < EPSILON;
+		return abs(lhs - rhs) < EPSILON;
 	}
 
 	template<class T, class ... ArgTypes>
