@@ -139,7 +139,7 @@ namespace Math3D {
 				return data[0][0] * data[1][1] - data[0][1] * data[1][0];
 			} 
 			else {
-				return determinant_impl(Seq_Row);
+				return determinant_impl(Seq_Row, make_adjoint_sign_sequence(Seq_Row));
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace Math3D {
 		}
 
 		constexpr this_t adjoint() const {
-			return adjoint_impl(Seq_Row, Seq_Col);
+			return adjoint_impl(Seq_Data, make_adjoint_sign_sequence(Seq_Data));
 		}
 
 		constexpr this_t inverse() const {
@@ -268,14 +268,14 @@ namespace Math3D {
 			((result.data[row][ColSeq] = data[row][ColSeq < col ? ColSeq : ColSeq + 1]), ...);
 		}
 
-		template<size_t ... Seq>
-		constexpr T determinant_impl(const index_sequence<Seq...>&) const {
+		template<size_t ... DataSeq, int ... SignSeq>
+		constexpr T determinant_impl(const index_sequence<DataSeq...>&, const integer_sequence<int, SignSeq...>&) const {
 			auto minor_base = remove_row(0);
 			
 			return ((
-				minor_base.remove_column(Seq).determinant() // Minor
-				* data[0][Seq] // Cofactor
-				* ((Seq % 2) ? -1 : 1) // Sign
+				minor_base.remove_column(DataSeq).determinant() // Minor
+				* data[0][DataSeq] // Cofactor
+				* SignSeq // Sign
 			) + ... + 0);
 		}
 
@@ -291,19 +291,18 @@ namespace Math3D {
 			return Matrix<T, H, 1>(data[Seq][i] ...);
 		}
 
-		template <size_t ... RowSeq, size_t ... ColSeq>
-		constexpr this_t adjoint_impl(const index_sequence<RowSeq...>&, const index_sequence<ColSeq...>&) const {
-			return cofactor_matrix_impl(Seq_Data);
+		template <size_t... Is>
+		static constexpr auto make_adjoint_sign_sequence(index_sequence<Is...>) {
+			return integer_sequence<int, ((Is % W + Is / W) % 2 ? -1 : 1)...>{};
 		}
 
-		template <size_t ... DataSeq>
-		constexpr this_t cofactor_matrix_impl(const index_sequence<DataSeq...>&) const {
+		template <size_t ... DataSeq, int ... SignSeq>
+		constexpr this_t adjoint_impl(const index_sequence<DataSeq...>&, const integer_sequence<int, SignSeq...>&) const {
 			// Compute flattened adjoint by mapping linear index to (row, col) pairs
 			// Adjoint is transpose of cofactor, so for linear index i:
 			// adjoint[i/W][i%W] = cofactor[i%W][i/W] = (-1)^(i%W + i/W) * det(minor(i%W, i/W))
 			return this_t((
-				remove_row(DataSeq % W).remove_column(DataSeq / W).determinant() 
-					* ((DataSeq % W + DataSeq / W) % 2 ? -1 : 1)
+				remove_row(DataSeq % W).remove_column(DataSeq / W).determinant() * SignSeq
 			) ...);
 		}
 
