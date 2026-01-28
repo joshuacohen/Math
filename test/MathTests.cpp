@@ -26,6 +26,12 @@ TEST_SUITE("Matrix") {
 		});
 
 		CHECK(Xformf() == Identity);
+		
+		CHECK(Mat3f::identity() == Mat3f {
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f
+		});
 	}
 
 	TEST_CASE("Assignment") {
@@ -66,6 +72,10 @@ TEST_SUITE("Matrix") {
 
 	TEST_CASE("Vector addition") {
 		CHECK(Vec3f(1.0f, 1.0f, 1.0f) + Vec3f{2.0f, 2.0f, 2.0f} == Vec3f{3.0f, 3.0f, 3.0f});
+	}
+
+	TEST_CASE("Vector subtraction") {
+		CHECK(Vec3f(1.0f, 2.0f, 3.0f) - Vec3f(3.0f, 2.0f, 1.0f) == Vec3f(-2.0f, 0.0f, 2.0f));
 	}
 
 	TEST_CASE("Matrix multiplication") {
