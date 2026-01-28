@@ -94,6 +94,10 @@ namespace Math3D {
 			return vector_add_impl(val, Seq_Data);
 		}
 
+		constexpr this_t operator-(const this_t& val) const {
+			return vector_sub_impl(val, Seq_Data);
+		}
+
 		template <class _T, size_t _W, size_t _H>
 		constexpr Matrix<T, _W, H> operator*(const Matrix<_T, _W, _H>& val) const {
 			static_assert(W == _H);
@@ -200,6 +204,12 @@ namespace Math3D {
 		constexpr this_t vector_add_impl(const this_t& val, const index_sequence<Seq...>&) const {
 			return {(arr[Seq] + val.arr[Seq]) ...};
 		}
+
+		template <size_t ... Seq>
+		constexpr this_t vector_sub_impl(const this_t& val, const index_sequence<Seq...>&) const {
+			return {(arr[Seq] - val.arr[Seq]) ...};
+		}
+
 
 		template <size_t ... Seq>
 		constexpr this_t scalar_div_impl(const T& val, const index_sequence<Seq...>& = Seq_Data) const {
