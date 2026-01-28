@@ -42,6 +42,15 @@ namespace Math3D {
 		static constexpr const auto Seq_Row  = make_index_sequence<W>();
 		static constexpr const auto Seq_Col  = make_index_sequence<H>();
 
+		static constexpr this_t identity() {
+			return identity_impl(Seq_Data);
+		}
+
+		template<size_t ... Seq> 
+		static constexpr this_t identity_impl(const index_sequence<Seq...>&) {
+			return this_t(std::array<T, N>{ ((Seq / W == Seq % W) ? (1) : (0))... });
+		}
+
 		Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>);
 
 		Matrix() : arr{0} {}
@@ -322,12 +331,7 @@ namespace Math3D {
 	using Mat4f = Matrix<float, 4, 4>;
 	using Xformf = Matrix<float, 3, 4>;
 
-	constexpr const Xformf Identity {
-		1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f
-	};
+	constexpr const Xformf Identity = Xformf::identity();
 
 	template <typename T, size_t W, size_t H>
 	Matrix<T, W, H>::Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>) {*this = Identity;}
