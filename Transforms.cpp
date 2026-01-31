@@ -11,6 +11,15 @@ namespace Math3D {
 		};
 	}
 
+	Xformf scale(const Vec3f& scale_factors) {
+		return Xformf {
+			scale_factors[0], 0.0f, 0.0f,
+			0.0f, scale_factors[1], 0.0f,
+			0.0f, 0.0f, scale_factors[2],
+			0.0f, 0.0f, 0.0f,
+		};
+	}
+
 	Mat4f perspective(float fov, float aspect, float near_clip, float far_clip) {
 		assert(far_clip != near_clip);
 		assert(fov != 0.0f);
