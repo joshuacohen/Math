@@ -7,6 +7,10 @@ namespace Math3D {
 	Xformf translation(const Vec3f& offset);
 	Xformf scale(const Vec3f& scale_factors);
 
+	Xformf rotX(float angle);
+	Xformf rotY(float angle);
+	Xformf rotZ(float angle);
+
 	Xformf look_at(const Xformf& from, const Xformf& to);
 
 

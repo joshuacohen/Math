@@ -20,6 +20,42 @@ namespace Math3D {
 		};
 	}
 
+	Xformf rotX(float angle) {
+		float c = std::cos(angle);
+		float s = std::sin(angle);
+
+		return Xformf {
+			1.0f, 	0.0f, 	0.0f,
+			0.0f, 	c, 		-s,
+			0.0f, 	s,		c,
+			0.0f, 	0.0f,	0.0f,
+		};
+	}
+
+	Xformf rotY(float angle) {
+		float c = std::cos(angle);
+		float s = std::sin(angle);
+
+		return Xformf {
+			c,		0.0f,	s,
+			0.0f,	1.0f,	0.0f,
+			-s, 	0.0f, 	c,
+			0.0f,	0.0f,	0.0f,
+		};
+	}
+
+	Xformf rotZ(float angle) {
+		float c = std::cos(angle);
+		float s = std::sin(angle);
+
+		return Xformf {
+			c,		-s,		0.0f,
+			s,		c,		0.0f,
+			0.0f,	0.0f,	1.0f,
+			0.0f,	0.0f,	0.0f,
+		};
+	}
+
 	Xformf translation(const Vec3f& offset) {
 		return Xformf {
 			1.0f, 0.0f, 0.0f,
