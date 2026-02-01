@@ -5,7 +5,7 @@ namespace Math3D {
 	Xformf rotation(const Vec3f& axis, float angle) {
 		float c = std::cos(angle);
 		float s = std::sin(angle);
-		float t = std::tan(angle);
+		float t = 1.0f - c;
 
 		Vec3f n_axis = axis.normalize();
 		float x = n_axis[0];
