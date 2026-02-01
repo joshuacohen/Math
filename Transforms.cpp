@@ -12,11 +12,16 @@ namespace Math3D {
 		float y = n_axis[1];
 		float z = n_axis[2];
 
+		float tx = t * x, ty = t * y, tz = t * z;
+		float sx = s * x, sy = s * y, sz = s * z;
+		float txx = tx * x, tyy = ty * y, tzz = tz * z;
+		float txy = tx * y, txz = tx * z, tyz = ty * z;
+
 		return Xformf {
-			t * x * x + c,     t * x * y - s * z, t * x * z + s * y,
-			t * y * x + s * z, t * y * y + c,     t * y * z - s * x,
-			t * z * x - s * y, t * z * y + s * x, t * z * z + c,
-			0.0f,              0.0f,              0.0f,
+			txx + c,  txy - sz, txz + sy,
+			txy + sz, tyy + c,  tyz - sx,
+			txz - sy, tyz + sx, tzz + c,
+			0.0f,     0.0f,     0.0f,
 		};
 	}
 
