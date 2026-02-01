@@ -15,6 +15,7 @@ namespace Math3D {
 
 	Xformf look_at(const Xformf& from, const Xformf& to);
 
+	Xformf compose(const Quaternion& rotation, const Vec3f& translation, const Vec3f& scale);
 
 	Mat4f perspective(float fov, float aspect, float near_clip, float far_clip);
 	Mat4f orthographic(float width, float height, float scale, float offset);

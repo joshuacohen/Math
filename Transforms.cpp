@@ -86,6 +86,10 @@ namespace Math3D {
 			0.0f, 0.0f, 0.0f,
 		};
 	}
+
+	Xformf compose(const Quaternion& _rotation, const Vec3f& _translation, const Vec3f& _scale) {
+		return rotation(_rotation) * translation(_translation) * scale(_scale);
+	}
 	
 	Xformf look_at(const Xformf& from, const Xformf& to) {
 		Vec3f eye = from[3];
