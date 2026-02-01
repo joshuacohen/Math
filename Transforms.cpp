@@ -90,6 +90,14 @@ namespace Math3D {
 	Xformf compose(const Quaternion& _rotation, const Vec3f& _translation, const Vec3f& _scale) {
 		return rotation(_rotation) * translation(_translation) * scale(_scale);
 	}
+
+	float distance(const Vec3f& a, const Vec3f& b) {
+		return (a - b).length();
+	}
+
+	float angle(const Vec3f& a, const Vec3f& b) {
+		return std::acos(a.dot(b));
+	}
 	
 	Xformf look_at(const Xformf& from, const Xformf& to) {
 		Vec3f eye = from[3];

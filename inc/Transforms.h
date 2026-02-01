@@ -18,6 +18,9 @@ namespace Math3D {
 	Xformf compose(const Quaternion& rotation, const Vec3f& translation, const Vec3f& scale);
 	void decompose(const Xformf& xform, Quaternion& out_rotation, Vec3f& out_translation, Vec3f& out_scale);
 
+	float distance(const Vec3f& a, const Vec3f& b);
+	float angle(const Vec3f& a, const Vec3f& b);
+
 	Mat4f perspective(float fov, float aspect, float near_clip, float far_clip);
 	Mat4f orthographic(float width, float height, float scale, float offset);
 }
