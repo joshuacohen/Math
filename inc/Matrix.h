@@ -98,6 +98,29 @@ namespace Math3D {
 			return vector_sub_impl(val, Seq_Data);
 		}
 
+		// Special case for Xformf * Xformf: treat as 4x4 with implied column (0,0,0,1)
+		// TODO sequence-ify at least rows 0-2
+		constexpr this_t operator*(const this_t& val) const requires (W == 3 && H == 4) {
+			return this_t {
+				// Row 0
+				data[0][0] * val.data[0][0] + data[0][1] * val.data[1][0] + data[0][2] * val.data[2][0],
+				data[0][0] * val.data[0][1] + data[0][1] * val.data[1][1] + data[0][2] * val.data[2][1],
+				data[0][0] * val.data[0][2] + data[0][1] * val.data[1][2] + data[0][2] * val.data[2][2],
+				// Row 1
+				data[1][0] * val.data[0][0] + data[1][1] * val.data[1][0] + data[1][2] * val.data[2][0],
+				data[1][0] * val.data[0][1] + data[1][1] * val.data[1][1] + data[1][2] * val.data[2][1],
+				data[1][0] * val.data[0][2] + data[1][1] * val.data[1][2] + data[1][2] * val.data[2][2],
+				// Row 2
+				data[2][0] * val.data[0][0] + data[2][1] * val.data[1][0] + data[2][2] * val.data[2][0],
+				data[2][0] * val.data[0][1] + data[2][1] * val.data[1][1] + data[2][2] * val.data[2][1],
+				data[2][0] * val.data[0][2] + data[2][1] * val.data[1][2] + data[2][2] * val.data[2][2],
+				// Row 3 (translation row - adds val's translation)
+				data[3][0] * val.data[0][0] + data[3][1] * val.data[1][0] + data[3][2] * val.data[2][0] + val.data[3][0],
+				data[3][0] * val.data[0][1] + data[3][1] * val.data[1][1] + data[3][2] * val.data[2][1] + val.data[3][1],
+				data[3][0] * val.data[0][2] + data[3][1] * val.data[1][2] + data[3][2] * val.data[2][2] + val.data[3][2],
+			};
+		}
+
 		template <class _T, size_t _W, size_t _H>
 		constexpr Matrix<T, _W, H> operator*(const Matrix<_T, _W, _H>& val) const {
 			static_assert(W == _H);

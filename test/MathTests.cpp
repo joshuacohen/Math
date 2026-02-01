@@ -82,6 +82,27 @@ TEST_SUITE("Matrix") {
 		CHECK( Matrix<int, 3, 3>  {1, 2, 3, 3, 2, 1, 1, 2, 3}
 			*  Matrix<int, 3, 3>  {4, 5, 6, 6, 5, 4, 4, 6, 5}
 			== Matrix<int, 3, 3>  {28, 33, 29, 28, 31, 31, 28, 33, 29});
+
+		// Xformf * Xformf (treated as 4x4 with implied column (0,0,0,1))
+		Xformf a {
+			1.0f, 0.0f, 0.0f,  // right
+			0.0f, 1.0f, 0.0f,  // up
+			0.0f, 0.0f, 1.0f,  // forward
+			1.0f, 2.0f, 3.0f,  // position (translation)
+		};
+		Xformf b {
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,
+			4.0f, 5.0f, 6.0f,
+		};
+		// Two translations should combine: (1,2,3) + (4,5,6) = (5,7,9)
+		CHECK(a * b == Xformf {
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,
+			5.0f, 7.0f, 9.0f,
+		});
 	}
 
 	TEST_CASE("Scalar division") {
