@@ -69,7 +69,7 @@ namespace Math3D {
 		constexpr this_t operator*(const T& val) const { return scalar_mul_impl(val, Seq_Data); }
 		constexpr this_t operator/(const T& val) const { return scalar_div_impl(val, Seq_Data); }
 
-		constexpr bool nearly_equal(const this_t& rhs) {
+		constexpr bool nearly_equal(const this_t& rhs) const {
 			return nearly_equal_impl(rhs, Seq_Data);
 		}
 
@@ -349,11 +349,16 @@ namespace Math3D {
 		}
 
 		template<size_t ... Seq>
-		constexpr bool nearly_equal_impl(const this_t& rhs, const index_sequence<Seq...>&) {
+		constexpr bool nearly_equal_impl(const this_t& rhs, const index_sequence<Seq...>&) const {
 			bool result = (Math3D::nearly_equal(arr[Seq], rhs.arr[Seq]) && ...);
 			return result;
 		}
 	};
+
+	template<typename T, size_t W, size_t H>
+	bool nearly_equal(const Matrix<T, W, H>& lhs, const Matrix<T, W, H>& rhs) {
+		return lhs.nearly_equal(rhs);
+	}
 
 	template<typename T, size_t W> using Vec = Matrix<T, W, 1>;
 	using Vec2f = Vec<float, 2>;
