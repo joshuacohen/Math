@@ -20,6 +20,17 @@ namespace Math3D {
 		};
 	}
 
+	Xformf look_at(const Xformf& from, const Xformf& to) {
+		Vec3f eye = from[3];
+		Vec3f target = to[3];
+
+		Vec3f fwd = (target - eye).normalize();
+		Vec3f left = Vec3f(0.0f, 1.0f, 0.0f).cross(fwd).normalize();
+		Vec3f up = fwd.cross(left).normalize();
+
+		return Xformf { {left, up, fwd, eye} };
+	}
+
 	Mat4f perspective(float fov, float aspect, float near_clip, float far_clip) {
 		assert(far_clip != near_clip);
 		assert(fov != 0.0f);
@@ -35,15 +46,12 @@ namespace Math3D {
 		};
 	}
 
-	Xformf look_at(const Xformf& from, const Xformf& to) {
-		Vec3f eye = from[3];
-		Vec3f target = to[3];
-
-		Vec3f fwd = (target - eye).normalize();
-		Vec3f left = Vec3f(0.0f, 1.0f, 0.0f).cross(fwd).normalize();
-		Vec3f up = fwd.cross(left).normalize();
-
-		return Xformf { {left, up, fwd, eye} };
-
+	Mat4f orthographic(float width, float height, float scale, float offset) {
+		return Mat4f {
+			1.0f / width,	0.0f,			0.0f,					0.0f,
+			0.0f,			1.0f / height,	0.0f,					0.0f,
+			0.0f, 			0.0f, 			scale,					0.0f,
+			0.0f, 			0.0f, 			1.0f - offset * scale,	1.0f,
+		};
 	}
 }
