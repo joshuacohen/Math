@@ -2,6 +2,24 @@
 #include <cmath>
 
 namespace Math3D {
+	Xformf rotation(const Vec3f& axis, float angle) {
+		float c = std::cos(angle);
+		float s = std::sin(angle);
+		float t = std::tan(angle);
+
+		Vec3f n_axis = axis.normalize();
+		float x = n_axis[0];
+		float y = n_axis[1];
+		float z = n_axis[2];
+
+		return Xformf {
+			t * x * x + c,     t * x * y - s * z, t * x * z + s * y,
+			t * y * x + s * z, t * y * y + c,     t * y * z - s * x,
+			t * z * x - s * y, t * z * y + s * x, t * z * z + c,
+			0.0f,              0.0f,              0.0f,
+		};
+	}
+
 	Xformf translation(const Vec3f& offset) {
 		return Xformf {
 			1.0f, 0.0f, 0.0f,

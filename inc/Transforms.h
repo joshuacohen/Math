@@ -3,6 +3,7 @@
 #include <cmath>
 
 namespace Math3D {
+	Xformf rotation(const Vec3f& axis, float angle);
 	Xformf translation(const Vec3f& offset);
 	Xformf scale(const Vec3f& scale_factors);
 
