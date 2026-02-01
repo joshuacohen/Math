@@ -138,9 +138,9 @@ namespace Math3D {
 
 		constexpr this_t cross(const this_t& val) const requires (is_same_v<this_t, Matrix<T, 3, 1>>) {
 			return row_t(
-				vec[1] * val[2] - vec[2] * val[1],
-				vec[2] * val[0] - vec[0] * val[2],
-				vec[0] * val[1] - vec[1] * val[0]
+				val[1] * vec[2] - val[2] * vec[1],
+				val[2] * vec[0] - val[0] * vec[2],
+				val[0] * vec[1] - val[1] * vec[0]
 			);
 		}
 

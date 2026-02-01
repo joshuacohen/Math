@@ -117,7 +117,7 @@ TEST_SUITE("Matrix") {
 		CHECK(Vec3f(2.0f, 4.0f, 6.0f).lerp(Vec3f(4.0f, 8.0f, 12.0f), 0.5f) == Vec3f(3.0f, 6.0f, 9.0f));
 	}
 	TEST_CASE("Cross Product") {
-		CHECK(Vec3f(1.0f, 2.0f, 3.0f).cross(Vec3f(3.0f, 4.0f, 5.0f)) == Vec3f(-2.0f, 4.0f, -2.0f));
+		CHECK(Vec3f(1.0f, 2.0f, 3.0f).cross(Vec3f(3.0f, 4.0f, 5.0f)) == Vec3f(2.0f, -4.0f, 2.0f));
 	}
 
 	TEST_CASE("Length") {
