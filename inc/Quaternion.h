@@ -38,10 +38,10 @@ namespace Math3D {
 		Quaternion Normalize() const { return (*this) / Mag(); }
 		Quaternion Conjugate() const { return Quaternion(i, -j, -k, -r); }
 		
-	private:
 		union {
 			float vals[4];
 			struct {float i, j, k, r;};
+			struct {float x, y, z, w;};
 		};
 	};
 

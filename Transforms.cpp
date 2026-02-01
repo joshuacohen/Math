@@ -1,4 +1,5 @@
-#include <Transforms.h>
+#include "Transforms.h"
+#include "Quaternion.h"
 #include <cmath>
 
 namespace Math3D {
@@ -23,6 +24,13 @@ namespace Math3D {
 			txz - sy, tyz + sx, tzz + c,
 			0.0f,     0.0f,     0.0f,
 		};
+	}
+
+	Xformf rotation(const Quaternion& axisAngle) {
+		float angle = 2.0f * std::acos(axisAngle.w);
+		float rs = 1.0f /std::sqrt(1.0f - axisAngle.w * axisAngle.w);
+
+		return rotation(Vec3f(axisAngle.x * rs, axisAngle.y * rs, axisAngle.z * rs), angle);
 	}
 
 	Xformf rotX(float angle) {
@@ -78,7 +86,7 @@ namespace Math3D {
 			0.0f, 0.0f, 0.0f,
 		};
 	}
-
+	
 	Xformf look_at(const Xformf& from, const Xformf& to) {
 		Vec3f eye = from[3];
 		Vec3f target = to[3];
