@@ -5,6 +5,9 @@
 #include "Matrix.h"
 #include "Transforms.h"
 
+#include <numbers>
+using std::numbers::pi;
+
 TEST_SUITE("Matrix") {
 	using namespace Math3D;
 
@@ -353,5 +356,17 @@ TEST_SUITE("Matrix") {
 			0.0f, 0.0f, 4.0f,
 			2.0f, 0.0f, 0.0f,
 		});
+	}
+
+	TEST_CASE("Euclidean Distance") {
+		CHECK(distance(Vec3f(1.0f, 2.0f, 3.0f), Vec3f(4.0f, 6.0f, 3.0f)) == 5.0f);
+		CHECK(distance(Vec3f(-1.0f, -2.0f, -3.0f), Vec3f(-4.0f, -6.0f, -3.0f)) == 5.0f);
+		CHECK(distance(Vec3f(0.0f, 0.0f, 0.0f), Vec3f(0.0f, 0.0f, 0.0f)) == 0.0f);
+	}
+
+	TEST_CASE("Angle Between Vectors") {
+		CHECK(angle(Vec3f(1.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 0.0f)) == doctest::Approx(pi / 2.0f));
+		CHECK(angle(Vec3f(1.0f, 0.0f, 0.0f), Vec3f(1.0f, 0.0f, 0.0f)) == doctest::Approx(0.0f));
+		CHECK(angle(Vec3f(1.0f, 0.0f, 0.0f), Vec3f(-1.0f, 0.0f, 0.0f)) == doctest::Approx(pi));
 	}
 }
