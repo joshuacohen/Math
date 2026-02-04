@@ -376,6 +376,17 @@ TEST_SUITE("Matrix") {
 		});
 	}
 
+	TEST_CASE("Perspective Projection") {
+
+		// Row major
+		CHECK(nearly_equal(perspective(pi / 2.0f, 16.0f / 9.0f, 0.1f, 100.0f), Mat4f {
+			0.5625f, 0.0f,    0.0f,               0.0f,
+			0.0f,    1.0f,    0.0f,               0.0f,
+			0.0f,    0.0f,   -1.002002f,         -1.0f,
+			0.0f,    0.0f,   -0.2002002f,         0.0f,
+		}));
+	}
+
 	TEST_CASE("Euclidean Distance") {
 		CHECK(distance(Vec3f(1.0f, 2.0f, 3.0f), Vec3f(4.0f, 6.0f, 3.0f)) == 5.0f);
 		CHECK(distance(Vec3f(-1.0f, -2.0f, -3.0f), Vec3f(-4.0f, -6.0f, -3.0f)) == 5.0f);

@@ -114,14 +114,15 @@ namespace Math3D {
 		assert(far_clip != near_clip);
 		assert(fov != 0.0f);
 
-		float yScale = 1.0f / std::tan(fov / 2.0f);
-		float clip = far_clip / (far_clip - near_clip);
-
+		float yScale = 1.0f / std::tan(fov * 0.5f);
+		float xScale = yScale / aspect;
+		float frustum_length = far_clip - near_clip;
+		
 		return Mat4f {
-			yScale / aspect,	0.0f, 	0.0f, 	0.0f,
-			0.0f,				yScale, 0.0f,	0.0f,
-			0.0f, 				0.0f, 	clip, 	1.0f,
-			0.0f, 		0.0f, -near_clip * clip, 0.0f,
+			xScale,	0.0f,		0.0f,								0.0f,
+			0.0f,	yScale,		0.0f,								0.0f,
+			0.0f,	0.0f,		-(far_clip + near_clip) / frustum_length,	-1.0f,
+			0.0f,	0.0f,		-(2.0f * near_clip * far_clip) / frustum_length,	0.0f,
 		};
 	}
 
