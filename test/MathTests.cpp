@@ -100,6 +100,24 @@ TEST_SUITE("Matrix") {
 			0.0f, 0.0f, 1.0f,
 			4.0f, 5.0f, 6.0f,
 		};
+
+		CHECK(Xformf {
+			1.0f, 2.0f, 3.0f,
+			3.0f, 2.0f, 1.0f,
+			1.0f, 2.0f, 3.0f,
+			0.0f, 0.0f, 0.0f,
+		} * Xformf {
+			4.0f, 5.0f, 6.0f,
+			6.0f, 5.0f, 4.0f,
+			4.0f, 6.0f, 5.0f,
+			0.0f, 0.0f, 0.0f,
+		} == Xformf {
+			28.0f, 33.0f, 29.0f,
+			28.0f, 31.0f, 31.0f,
+			28.0f, 33.0f, 29.0f,
+			0.0f, 0.0f, 0.0f,
+		});
+
 		// Two translations should combine: (1,2,3) + (4,5,6) = (5,7,9)
 		CHECK(a * b == Xformf {
 			1.0f, 0.0f, 0.0f,

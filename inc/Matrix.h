@@ -98,27 +98,18 @@ namespace Math3D {
 			return vector_sub_impl(val, Seq_Data);
 		}
 
-		// Special case for Xformf * Xformf: treat as 4x4 with implied column (0,0,0,1)
-		// TODO sequence-ify at least rows 0-2
+		// Special case for Xformf * Xformf: treat as 4x4 with implied 4th column (0,0,0,1)
 		constexpr this_t operator*(const this_t& val) const requires (W == 3 && H == 4) {
-			return this_t {
-				// Row 0
-				data[0][0] * val.data[0][0] + data[0][1] * val.data[1][0] + data[0][2] * val.data[2][0],
-				data[0][0] * val.data[0][1] + data[0][1] * val.data[1][1] + data[0][2] * val.data[2][1],
-				data[0][0] * val.data[0][2] + data[0][1] * val.data[1][2] + data[0][2] * val.data[2][2],
-				// Row 1
-				data[1][0] * val.data[0][0] + data[1][1] * val.data[1][0] + data[1][2] * val.data[2][0],
-				data[1][0] * val.data[0][1] + data[1][1] * val.data[1][1] + data[1][2] * val.data[2][1],
-				data[1][0] * val.data[0][2] + data[1][1] * val.data[1][2] + data[1][2] * val.data[2][2],
-				// Row 2
-				data[2][0] * val.data[0][0] + data[2][1] * val.data[1][0] + data[2][2] * val.data[2][0],
-				data[2][0] * val.data[0][1] + data[2][1] * val.data[1][1] + data[2][2] * val.data[2][1],
-				data[2][0] * val.data[0][2] + data[2][1] * val.data[1][2] + data[2][2] * val.data[2][2],
-				// Row 3 (translation row - adds val's translation)
-				data[3][0] * val.data[0][0] + data[3][1] * val.data[1][0] + data[3][2] * val.data[2][0] + val.data[3][0],
-				data[3][0] * val.data[0][1] + data[3][1] * val.data[1][1] + data[3][2] * val.data[2][1] + val.data[3][1],
-				data[3][0] * val.data[0][2] + data[3][1] * val.data[1][2] + data[3][2] * val.data[2][2] + val.data[3][2],
-			};
+			this_t result;
+
+			// Treat the first 3 rows as a 3x3 submatrix
+			(Matrix<T, 3, 3>&)(result) = (Matrix<T, 3, 3>&)(*this) * (Matrix<T, 3, 3>&)(val);
+
+			// Handle the translation component implicitly
+			result[3][0] = data[3][0] * val.data[0][0] + data[3][1] * val.data[1][0] + data[3][2] * val.data[2][0] + val.data[3][0];
+			result[3][1] = data[3][0] * val.data[0][1] + data[3][1] * val.data[1][1] + data[3][2] * val.data[2][1] + val.data[3][1];
+			result[3][2] = data[3][0] * val.data[0][2] + data[3][1] * val.data[1][2] + data[3][2] * val.data[2][2] + val.data[3][2];
+			return result;
 		}
 
 		template <class _T, size_t _W, size_t _H>
