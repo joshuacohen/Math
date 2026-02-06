@@ -57,10 +57,11 @@ namespace Math3D {
 
 		Matrix(const T& val) {arr.fill(val); }
 
+		constexpr Matrix(const row_t (&vecs)[H]) { vector_constructor_impl(vecs, Seq_Col); }
+
 		template <typename ... ArgTypes>
 		constexpr Matrix(ArgTypes ... args) requires (Assignable<T, ArgTypes...>): arr{args...} { static_assert(sizeof...(args) <= N); }
 		constexpr Matrix(const array<T, N>& _arr) : arr(_arr) {}
-		constexpr Matrix(const row_t (&vecs)[H]) { vector_constructor_impl(vecs, Seq_Col); }
 		constexpr this_t& operator= (const this_t& val) { arr = val.arr; return *this; }
 		constexpr bool operator==(const this_t& val) const { return arr == val.arr; }
 		constexpr conditional_t<H == 1, T, row_t>& operator[](size_t i) { return vec[i]; }
@@ -99,21 +100,32 @@ namespace Math3D {
 		}
 
 		// Special case for Xformf * Xformf: treat as 4x4 with implied 4th column (0,0,0,1)
-		constexpr this_t operator*(const this_t& val) const requires (W == 3 && H == 4) {
+		constexpr Matrix<T, 3, 4> operator*(const Matrix<T, 3, 4>& val) const requires (W == 3 && H == 4) {
 			this_t result;
 
 			// Treat the first 3 rows as a 3x3 submatrix
 			(Matrix<T, 3, 3>&)(result) = (Matrix<T, 3, 3>&)(*this) * (Matrix<T, 3, 3>&)(val);
+			Matrix<T, 4, 1> position {data[3][0], data[3][1], data[3][2], 1.0f};
 
-			// Handle the translation component implicitly
-			result[3][0] = data[3][0] * val.data[0][0] + data[3][1] * val.data[1][0] + data[3][2] * val.data[2][0] + val.data[3][0];
-			result[3][1] = data[3][0] * val.data[0][1] + data[3][1] * val.data[1][1] + data[3][2] * val.data[2][1] + val.data[3][1];
-			result[3][2] = data[3][0] * val.data[0][2] + data[3][1] * val.data[1][2] + data[3][2] * val.data[2][2] + val.data[3][2];
+			// Compute the bottom row: 3x4 transform * (val with implicit [0,0,0,1] bottom row)
+			result[3] = row_t { position.dot(val.col(0)), position.dot(val.col(1)), position.dot(val.col(2)) };
+			return result;
+		}
+
+		constexpr Matrix<T, 4, 4> operator*(const Matrix<T, 4, 4>& val) const requires (W == 3 && H == 4) {
+			Matrix<T, 4, 4> result;
+			Matrix<T, 4, 1> position {data[3][0], data[3][1], data[3][2], 1.0f};
+
+			// Treat the first 3 rows as a 3x4 submatrix
+			(Matrix<T, 3, 3>&)(result) = (Matrix<T, 3, 3>&)(*this) * (Matrix<T, 3, 3>&)(val);
+			
+			// Compute the bottom row: 3x4 transform * (val with implicit [0,0,0,1] bottom row)
+			result[3] = Matrix<T, 4, 1> { position.dot(val.col(0)), position.dot(val.col(1)), position.dot(val.col(2)), position.dot(val.col(3)) };
 			return result;
 		}
 
 		template <class _T, size_t _W, size_t _H>
-		constexpr Matrix<T, _W, H> operator*(const Matrix<_T, _W, _H>& val) const {
+		constexpr Matrix<T, _W, H> operator*(const Matrix<_T, _W, _H>& val) const /*requires (W == _W && H == _H)*/ {
 			static_assert(W == _H);
 			return matrix_mul_impl(val, Seq_Row);
 		}
