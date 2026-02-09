@@ -31,6 +31,12 @@ jobs:
     - name: Build release
       run: cmake --build build --config Release --target MathTests
 
+    - name: Build MinSizeRel
+      run: cmake --build build --config MinSizeRel --target MathTests
+
+    - name: Build RelWithDebInfo
+      run: cmake --build build --config RelWithDebInfo --target MathTests
+
   build-gcc:
     runs-on: ubuntu-latest
 
@@ -55,6 +61,12 @@ jobs:
     - name: Build release
       run: cmake --build build --config Release --target MathTests
 
+    - name: Build MinSizeRel
+      run: cmake --build build --config MinSizeRel --target MathTests
+
+    - name: Build RelWithDebInfo
+      run: cmake --build build --config RelWithDebInfo --target MathTests
+
   build-win:
     runs-on: windows-latest
 
@@ -76,3 +88,9 @@ jobs:
 
     - name: Build release
       run: cmake --build build --config Release
+
+    - name: Build MinSizeRel
+      run: cmake --build build --config MinSizeRel --target MathTests
+
+    - name: Build RelWithDebInfo
+      run: cmake --build build --config RelWithDebInfo --target MathTests
