@@ -424,4 +424,19 @@ TEST_SUITE("Matrix") {
 		CHECK(angle(Vec3f(1.0f, 0.0f, 0.0f), Vec3f(1.0f, 0.0f, 0.0f)) == doctest::Approx(0.0f));
 		CHECK(angle(Vec3f(1.0f, 0.0f, 0.0f), Vec3f(-1.0f, 0.0f, 0.0f)) == doctest::Approx(pi));
 	}
+
+	TEST_CASE("MVP") {
+		Xformf model = Identity;
+		Xformf view = look_at(translation(Vec3f{0.0f, 0.0f, -1.0f}), Identity);
+		Mat4f projection = perspective((float)pi, 1.778f, 0.1f, 100.0f);
+		
+		Mat4f expected {
+			0.0f, 0.0f, 0.0f, 0.0f, 
+			0.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.001001f, 1.0f,
+			0.0f, 0.0f, 0.9009009f, 1.0f,
+		};
+
+		CHECK(nearly_equal(model * view * projection, expected));
+	}
 }
