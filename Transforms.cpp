@@ -107,7 +107,14 @@ namespace Math3D {
 		Vec3f left = Vec3f(0.0f, 1.0f, 0.0f).cross(fwd).normalize();
 		Vec3f up = fwd.cross(left).normalize();
 
-		return Xformf { {left, up, fwd, eye} };
+		// Transpose the rotation (rows become columns) and negate
+		// the translation through dot products to get world-to-camera.
+		return Xformf {
+			left[0],  up[0],  fwd[0],
+			left[1],  up[1],  fwd[1],
+			left[2],  up[2],  fwd[2],
+			-left.dot(eye), -up.dot(eye), -fwd.dot(eye),
+		};
 	}
 
 	Mat4f perspective(float fov, float aspect, float near_clip, float far_clip) {
