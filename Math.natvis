@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
- 	<!-- Specialized view for linear transforms-->
-	<Type Name="Math3D::Matrix&lt;float,3,4&gt;">
+ 	<!-- Specialized view for transforms-->
+	<Type Name="Math3D::Matrix&lt;*,*,4&gt;">
 		<DisplayString>Xformf</DisplayString>
 		<Expand>
 			<Item Name="[0]">vec[0]</Item>
@@ -37,17 +37,6 @@
 		</Expand>
 	</Type>
 
-	<!-- Specialized view for vectors-->
-	<Type Name="Math3D::Matrix&lt;*,*,1&gt;">
-		<DisplayString>Vec{$T2}({arr._Elems[0]}, {arr._Elems[1]}, {arr._Elems[2]}, ...)</DisplayString>
-		<Expand>
-			<ArrayItems>
-				<Size>$T2</Size>
-				<ValuePointer>arr._Elems</ValuePointer>
-			</ArrayItems>
-		</Expand>
-	</Type>
-
 	<!-- Common vector sizes -->
 	<Type Name="Math3D::Matrix&lt;*,2,1&gt;">
 		<DisplayString>Vec2({arr._Elems[0]}, {arr._Elems[1]})</DisplayString>
@@ -73,6 +62,17 @@
 			<Item Name="y">arr._Elems[1]</Item>
 			<Item Name="z">arr._Elems[2]</Item>
 			<Item Name="w">arr._Elems[3]</Item>
+		</Expand>
+	</Type>
+
+	<!-- Specialized view for vectors-->
+	<Type Name="Math3D::Matrix&lt;*,*,1&gt;">
+		<DisplayString>Vec{$T2}({arr._Elems[0]}, {arr._Elems[1]}, {arr._Elems[2]}, ...)</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Size>$T2</Size>
+				<ValuePointer>arr._Elems</ValuePointer>
+			</ArrayItems>
 		</Expand>
 	</Type>
 </AutoVisualizer>
