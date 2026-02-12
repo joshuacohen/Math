@@ -393,6 +393,15 @@ TEST_SUITE("Matrix") {
 		});
 	}
 
+	TEST_CASE("Look At") {
+		CHECK(nearly_equal(look_at(translation(Vec3f{0.0f, 0.0f, -1.0f}), Identity), Xformf {
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, 1.0f,
+		}));
+	}
+
 	TEST_CASE("Perspective Projection") {
 
 		// Row major
