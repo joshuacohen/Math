@@ -396,11 +396,11 @@ TEST_SUITE("Matrix") {
 	TEST_CASE("Perspective Projection") {
 
 		// Row major
-		CHECK(nearly_equal(perspective(pi / 2.0f, 16.0f / 9.0f, 0.1f, 100.0f), Mat4f {
-			0.5625f, 0.0f,    0.0f,               0.0f,
-			0.0f,    1.0f,    0.0f,               0.0f,
-			0.0f,    0.0f,   -1.002002f,         -1.0f,
-			0.0f,    0.0f,   -0.2002002f,         0.0f,
+		CHECK(nearly_equal(perspective((float)pi / 2.0f, 16.0f / 9.0f, 0.1f, 100.0f), Mat4f {
+			0.5625f, 0.0f,  0.0f,       0.0f,
+			0.0f,    1.0f,  0.0f,       0.0f,
+			0.0f,    0.0f, 1.0010010f,  1.0f,
+			0.0f,    0.0f, -0.1001001f, 0.0f,
 		}));
 	}
 
