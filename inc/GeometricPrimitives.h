@@ -24,6 +24,11 @@ namespace Math3D {
 		Vert3d verts[3];
 	};
 
+	struct Segment {
+		Point start;
+		Point end;
+	};
+
 	struct Ray {
 		Point point;
 		Vec3f dir;
@@ -42,5 +47,15 @@ namespace Math3D {
 	struct AABB {
 		Point center;
 		float halfwidths[3];
+	};
+
+	struct Cylinder {
+		Segment axis;
+		float radius;
+	};
+
+	struct Capsule {
+		Segment axis;
+		float radius;
 	};
 }
