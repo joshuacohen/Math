@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 project(Math)
-	add_library(Math Transforms.cpp Quaternion.cpp)
+	add_library(Math Transforms.cpp Quaternion.cpp Collision.cpp)
 	target_include_directories(Math PUBLIC inc)
 
 	add_executable(MathTests test/MathTests.cpp)

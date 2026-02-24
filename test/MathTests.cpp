@@ -4,12 +4,13 @@
 #include "doctest.h"
 #include "Matrix.h"
 #include "Transforms.h"
+#include "GeometricPrimitives.h"
 
 #include <numbers>
 using std::numbers::pi;
+using namespace Math3D;
 
 TEST_SUITE("Matrix") {
-	using namespace Math3D;
 
 	TEST_CASE("Construction") {
 		Vec3f a;
@@ -438,5 +439,14 @@ TEST_SUITE("Matrix") {
 		};
 
 		CHECK(nearly_equal(model * view * projection, expected));
+	}
+}
+
+TEST_SUITE("Collision Detection") {
+	TEST_CASE("Half Space 3D") {
+		Plane plane { Vec3f(0.0f, 1.0f, 0.0f), 0.0f }; // horizontal plane at y=0
+		CHECK(HalfSpace3D(Vec3f(0.0f, 1.0f, 0.0f), plane) > 0); // above the plane
+		CHECK(HalfSpace3D(Vec3f(0.0f, -1.0f, 0.0f), plane) < 0); // below the plane
+		CHECK(HalfSpace3D(Vec3f(1.0f, 0.0f, 1.0f), plane) == 0); // on the plane
 	}
 }
