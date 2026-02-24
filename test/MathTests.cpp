@@ -348,36 +348,44 @@ TEST_SUITE("Matrix") {
 		CHECK(inv.nearly_equal(after));
 		CHECK(Mat3f { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,}.nearly_equal(before * before.inverse()));
 	}
+}
 
-	TEST_CASE("Transforms") {
+TEST_SUITE("Transforms") {
+	Xformf rot90z {  // 90 degree rotation around Z
+		0.0f, -1.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f,
+	};
+
+	Xformf trans {
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f,
+	};
+
+	Xformf scaling {
+		2.0f, 0.0f, 0.0f,
+		0.0f, 3.0f, 0.0f,
+		0.0f, 0.0f, 4.0f,
+		0.0f, 0.0f, 0.0f,
+	};
+
+	TEST_CASE("Rotation") {
 		// Test rotation * translation
-		
-		Xformf rot90z {  // 90 degree rotation around Z
-			0.0f, -1.0f, 0.0f,
-			1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 0.0f, 0.0f,
-		};
 		CHECK(nearly_equal(rot90z, rotation(Vec3f(0.0f, 0.0f, 1.0f), 3.14159265f / 2.0f)));
+	}
 
-		Xformf trans {
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			1.0f, 0.0f, 0.0f,
-		};
-
+	TEST_CASE("Translation") {
 		CHECK(nearly_equal(trans, translation(Vec3f(1.0f, 0.0f, 0.0f))));
+	}
 
-		Xformf scaling {
-			2.0f, 0.0f, 0.0f,
-			0.0f, 3.0f, 0.0f,
-			0.0f, 0.0f, 4.0f,
-			0.0f, 0.0f, 0.0f,
-		};
-
+	TEST_CASE("Scaling") {
 		CHECK(nearly_equal(scaling, scale(Vec3f(2.0f, 3.0f, 4.0f))));
+	}
 
+	TEST_CASE("Composition") {
 		// rot90z * trans: rotation followed by translation
 		CHECK(rot90z * trans == Xformf {
 			0.0f, -1.0f, 0.0f,
