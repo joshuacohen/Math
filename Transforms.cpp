@@ -1,6 +1,7 @@
 #include "Transforms.h"
 #include "Quaternion.h"
 #include <cmath>
+#include <cassert>
 
 namespace Math3D {
 	Xformf rotation(const Vec3f& axis, float angle) {

@@ -1,6 +1,6 @@
 #pragma once
-#include "Matrix.h"
 #include <cmath>
+import Matrix;
 
 namespace Math3D {
 	class Quaternion;

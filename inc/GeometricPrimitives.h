@@ -1,5 +1,5 @@
 #pragma once
-#include "Matrix.h"
+import Matrix;
 
 namespace Math3D {
 	using Point = Vec3f;

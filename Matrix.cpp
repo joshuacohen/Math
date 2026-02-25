@@ -1,15 +1,17 @@
-#pragma once
+module;
 #include <cassert>
 #include <array>
 #include <type_traits>
 #include <utility>
 #include <cmath>
 
+export module Matrix;
+
 // This is some bullshit
 // #define EPSILON numeric_limits<T>::epsilon()
 #define EPSILON 1e-06F
 
-namespace Math3D {
+export namespace Math3D {
 	using namespace std;
 
 	template <typename T, size_t W, size_t H>
@@ -63,7 +65,7 @@ namespace Math3D {
 		constexpr Matrix(ArgTypes ... args) requires (Assignable<T, ArgTypes...>): arr{args...} { static_assert(sizeof...(args) <= N); }
 		constexpr Matrix(const array<T, N>& _arr) : arr(_arr) {}
 		constexpr this_t& operator= (const this_t& val) { arr = val.arr; return *this; }
-		constexpr bool operator==(const this_t& val) const { return arr == val.arr; }
+		constexpr bool operator==(const this_t& val) const { return equal_impl(val, Seq_Data); }
 		constexpr conditional_t<H == 1, T, row_t>& operator[](size_t i) { return vec[i]; }
 		constexpr conditional_t<H == 1, T, row_t> operator[](size_t i) const { return vec[i]; }
 		constexpr this_t operator+(const T& val) const { return scalar_add_impl(val, Seq_Data); }
@@ -224,6 +226,11 @@ namespace Math3D {
 		};
 
 	private:
+		template <size_t ... Seq>
+		constexpr bool equal_impl(const this_t& val, const index_sequence<Seq...>&) const {
+			return ((arr[Seq] == val.arr[Seq]) && ...);
+		}
+
 		template <size_t ... Seq>
 		constexpr this_t scalar_add_impl(const T& val, const index_sequence<Seq...>& = Seq_Data) const {
 			return {(arr[Seq] + val) ...};
