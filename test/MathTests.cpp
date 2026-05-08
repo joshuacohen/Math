@@ -348,6 +348,20 @@ TEST_SUITE("Matrix") {
 		CHECK(inv.nearly_equal(after));
 		CHECK(Mat3f { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,}.nearly_equal(before * before.inverse()));
 	}
+
+	TEST_CASE("Swizzle") {
+		CHECK(Vec3f(1.0f, 2.0f, 3.0f).swizzle<0, 1, 2>() == Vec3f(1.0f, 2.0f, 3.0f));
+		CHECK(Vec3f(1.0f, 2.0f, 3.0f).swizzle<2, 0, 1>() == Vec3f(3.0f, 1.0f, 2.0f));
+		CHECK(Mat3f {
+			1.0f, 2.0f, 3.0f,
+			4.0f, 5.0f, 6.0f,
+			7.0f, 8.0f, 9.0f,
+		}.swizzle<8, 7, 6, 5, 4, 3, 2, 1, 0>() == Mat3f {
+			9.0f, 8.0f, 7.0f,
+			6.0f, 5.0f, 4.0f,
+			3.0f, 2.0f, 1.0f,
+		});
+	}
 }
 
 TEST_SUITE("Transforms") {

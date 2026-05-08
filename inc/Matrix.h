@@ -217,6 +217,12 @@ namespace Math3D {
 			return adjoint() * (1 / det);
 		}
 
+		template <size_t ... Args>
+		constexpr this_t swizzle() const requires (sizeof...(Args) == N) {
+			static_assert(((Args < N) && ...));
+			return this_t(arr[Args]...);
+		}
+
 		union {
 			array<T, N> arr;
 			array<array<T, W>, H> data;
