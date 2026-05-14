@@ -328,7 +328,6 @@ TEST_SUITE("Matrix") {
 		CHECK(mat.adjoint() == expected);
 	}
 
-	// TODO epsilon
 	// TODO adjoint property
 	TEST_CASE("Inverse") {
 		Mat3f before {
