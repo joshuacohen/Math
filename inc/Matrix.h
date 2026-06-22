@@ -101,35 +101,41 @@ namespace Math3D {
 
 		// Special case for Xformf * Xformf: treat as 4x4 with implied 4th column (0,0,0,1)
 		constexpr Matrix<T, 3, 4> operator*(const Matrix<T, 3, 4>& val) const requires (W == 3 && H == 4) {
-			// TODO optimize out construction of temporary matrices
-			Matrix<T, 4, 4> result = Matrix<T, 4, 4> {
-				data[0][0], data[0][1], data[0][2], 0.0f,
-				data[1][0], data[1][1], data[1][2], 0.0f,
-				data[2][0], data[2][1], data[2][2], 0.0f,
-				data[3][0], data[3][1], data[3][2], 1.0f,
-			} * Matrix<T, 4, 4> {
-				val.data[0][0], val.data[0][1], val.data[0][2], 0.0f,
-				val.data[1][0], val.data[1][1], val.data[1][2], 0.0f,
-				val.data[2][0], val.data[2][1], val.data[2][2], 0.0f,
-				val.data[3][0], val.data[3][1], val.data[3][2], 1.0f,
-			};
-
 			return Matrix<T, 3, 4> {
-				result.data[0][0], result.data[0][1], result.data[0][2],
-				result.data[1][0], result.data[1][1], result.data[1][2],
-				result.data[2][0], result.data[2][1], result.data[2][2],
-				result.data[3][0], result.data[3][1], result.data[3][2],
+				data[0][0] * val.data[0][0] + data[0][1] * val.data[1][0] + data[0][2] * val.data[2][0],
+				data[0][0] * val.data[0][1] + data[0][1] * val.data[1][1] + data[0][2] * val.data[2][1],
+				data[0][0] * val.data[0][2] + data[0][1] * val.data[1][2] + data[0][2] * val.data[2][2],
+				data[1][0] * val.data[0][0] + data[1][1] * val.data[1][0] + data[1][2] * val.data[2][0],
+				data[1][0] * val.data[0][1] + data[1][1] * val.data[1][1] + data[1][2] * val.data[2][1],
+				data[1][0] * val.data[0][2] + data[1][1] * val.data[1][2] + data[1][2] * val.data[2][2],
+				data[2][0] * val.data[0][0] + data[2][1] * val.data[1][0] + data[2][2] * val.data[2][0],
+				data[2][0] * val.data[0][1] + data[2][1] * val.data[1][1] + data[2][2] * val.data[2][1],
+				data[2][0] * val.data[0][2] + data[2][1] * val.data[1][2] + data[2][2] * val.data[2][2],
+				data[3][0] * val.data[0][0] + data[3][1] * val.data[1][0] + data[3][2] * val.data[2][0] + val.data[3][0],
+				data[3][0] * val.data[0][1] + data[3][1] * val.data[1][1] + data[3][2] * val.data[2][1] + val.data[3][1],
+				data[3][0] * val.data[0][2] + data[3][1] * val.data[1][2] + data[3][2] * val.data[2][2] + val.data[3][2],
 			};
 		}
 
-		// TODO optimize out construction of temporary matrices
 		constexpr Matrix<T, 4, 4> operator*(const Matrix<T, 4, 4>& val) const requires (W == 3 && H == 4) {
 			return Matrix<T, 4, 4> {
-				data[0][0], data[0][1], data[0][2], 0.0f,
-				data[1][0], data[1][1], data[1][2], 0.0f,
-				data[2][0], data[2][1], data[2][2], 0.0f,
-				data[3][0], data[3][1], data[3][2], 1.0f,
-			} * val;
+				data[0][0] * val.data[0][0] + data[0][1] * val.data[1][0] + data[0][2] * val.data[2][0],
+				data[0][0] * val.data[0][1] + data[0][1] * val.data[1][1] + data[0][2] * val.data[2][1],
+				data[0][0] * val.data[0][2] + data[0][1] * val.data[1][2] + data[0][2] * val.data[2][2],
+				data[0][0] * val.data[0][3] + data[0][1] * val.data[1][3] + data[0][2] * val.data[2][3],
+				data[1][0] * val.data[0][0] + data[1][1] * val.data[1][0] + data[1][2] * val.data[2][0],
+				data[1][0] * val.data[0][1] + data[1][1] * val.data[1][1] + data[1][2] * val.data[2][1],
+				data[1][0] * val.data[0][2] + data[1][1] * val.data[1][2] + data[1][2] * val.data[2][2],
+				data[1][0] * val.data[0][3] + data[1][1] * val.data[1][3] + data[1][2] * val.data[2][3],
+				data[2][0] * val.data[0][0] + data[2][1] * val.data[1][0] + data[2][2] * val.data[2][0],
+				data[2][0] * val.data[0][1] + data[2][1] * val.data[1][1] + data[2][2] * val.data[2][1],
+				data[2][0] * val.data[0][2] + data[2][1] * val.data[1][2] + data[2][2] * val.data[2][2],
+				data[2][0] * val.data[0][3] + data[2][1] * val.data[1][3] + data[2][2] * val.data[2][3],
+				data[3][0] * val.data[0][0] + data[3][1] * val.data[1][0] + data[3][2] * val.data[2][0] + val.data[3][0],
+				data[3][0] * val.data[0][1] + data[3][1] * val.data[1][1] + data[3][2] * val.data[2][1] + val.data[3][1],
+				data[3][0] * val.data[0][2] + data[3][1] * val.data[1][2] + data[3][2] * val.data[2][2] + val.data[3][2],
+				data[3][0] * val.data[0][3] + data[3][1] * val.data[1][3] + data[3][2] * val.data[2][3] + val.data[3][3],
+			};
 		}
 
 		template <class _T, size_t _W, size_t _H>
