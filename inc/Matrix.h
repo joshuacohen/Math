@@ -295,7 +295,7 @@ namespace Math3D {
 
 		template <size_t ... Seq>
 		constexpr T magnitude_impl(const index_sequence<Seq...>&) const {
-			return std::sqrt((0 + ... + static_cast<T>(pow(arr[Seq], 2))));
+			return std::sqrt((0 + ... + static_cast<T>(arr[Seq] * arr[Seq])));
 		}
 
 		template <size_t ... Seq>
