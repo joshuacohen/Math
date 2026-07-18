@@ -31,8 +31,8 @@ For completed work, see [src/math/CHANGELOG.md](src/math/CHANGELOG.md)
 - [X] `Xformf LookAt(Vec3f eye, Vec3f center, Vec3f up)` in Matrix.h
 - [X] Vector utility: `T distance(Vec3f, Vec3f)` — Euclidean distance
 - [X] Vector utility: `T angle(Vec3f, Vec3f)` — angle in radians [0, π]
-- [ ] Tests for projection matrices (frustum validation)
-- [ ] Tests for LookAt (camera pointing checks)
+- [X] Tests for projection matrices (frustum validation)
+- [X] Tests for LookAt (camera pointing checks)
 
 ### Phase 3: Quaternion Enhancements
 - [ ] `Quaternion(const Xformf&)` constructor — from rotation matrix via trace
@@ -127,3 +127,43 @@ src/math/
 - [ ] Inverse accuracy: `|M · M^-1 - I| < 1e-5` element-wise
 - [ ] LookAt produces camera frustums visible in scene
 - [ ] Euler → Quat → Euler error < 0.001 radians
+
+## Optimization Opportunities
+
+Captured optimization opportunities in `inc/Matrix.h` that do not change behavior.
+
+| Optimization | Priority | Location | Status |
+|---|---|---|---|
+| Replace `pow(x, 2)` with `x * x` in `magnitude_impl` | HIGH | `Matrix.h` magnitude_impl | Done |
+| Remove row/col temporary construction in generic matrix multiply | HIGH | `Matrix.h` matrix_mul_impl | Pending |
+| Change `normalize()` to reciprocal multiply | MEDIUM | `Matrix.h` normalize | Pending |
+| Specialized `3x3`/`4x4` determinant and inverse | MEDIUM | `Matrix.h` determinant/adjoint/inverse | Pending |
+| Direct member initialization in `Xformf` default constructor | LOW | `Matrix.h` Xformf ctor | Pending |
+| Add explicit SIMD fast paths for `Vec4f`/`Mat4f` | LOW | new specialization file | Pending |
+
+### Implementation Checklist
+
+- [X] Replace `pow(arr[Seq], 2)` with `arr[Seq] * arr[Seq]` in `magnitude_impl`
+- [ ] Rework `matrix_mul_impl_inner` to read `data[row][k] * rhs.data[k][col]` directly — removes per-cell `row_t`/`col_t` temporaries (`inc/Matrix.h` matrix_mul_impl)
+- [ ] Change `normalize()` to `return *this * (T{1} / length())` — one `sqrt` + one multiply vs N divides
+- [ ] Add closed-form fast paths for `3x3` and `4x4` determinant and inverse; keep generic as fallback
+- [ ] Change `Xformf` default constructor to use direct member initialization instead of assigning from global `Identity`
+- [ ] (Optional) Add runtime SIMD specializations for `Vec4f`/`Mat4f` after benchmarking confirms benefit
+
+### Notes on SIMD and fold expressions
+
+Pack expansions over `index_sequence` force full compile-time unrolling, which is good for small fixed sizes (2–4) but does not give the compiler a contiguous loop to auto-vectorize. For deliberate SIMD:
+
+- Keep the current `constexpr` fold-based implementation as the generic baseline.
+- Add a runtime-only specialized path for `float` types using intrinsics or `std::simd` where benchmarks confirm a benefit.
+- A simple counted loop over `arr` in a non-`constexpr` context also gives the compiler a better auto-vectorization target than a fold expression tree.
+
+### Benchmark guidance
+
+Benchmark these operations before committing to deeper changes:
+
+- `Vec3f::length()` and `Vec4f::length()`
+- `Mat4f * Mat4f` and `Xformf * Xformf`
+- `Mat3f::inverse()` and `Mat4f::inverse()`
+
+Expected result: generic multiply cleanup helps codegen modestly; inverse/determinant specializations dominate any deeper speedup discussion.
