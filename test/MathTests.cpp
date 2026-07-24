@@ -482,6 +482,14 @@ TEST_SUITE("Quaternions") {
 		CHECK(q1 == q2);
 		CHECK(!(q1 == q3));
 	}
+
+	TEST_CASE("From Rotation Matrix") {
+		CHECK(
+			Quaternion(rotX(pi / 2.0f))
+			.nearly_equal
+			(Quaternion(std::sqrt(0.5f), 0.0f, 0.0f, std::sqrt(0.5f)))
+		);
+	}
 }
 
 TEST_SUITE("Collision Detection") {
