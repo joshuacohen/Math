@@ -3,6 +3,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 #include "Matrix.h"
+#include "Quaternion.h"
 #include "Transforms.h"
 #include "GeometricPrimitives.h"
 
@@ -461,6 +462,9 @@ TEST_SUITE("Transforms") {
 
 		CHECK(nearly_equal(model * view * projection, expected));
 	}
+}
+
+TEST_SUITE("Quaternions") {
 }
 
 TEST_SUITE("Collision Detection") {
