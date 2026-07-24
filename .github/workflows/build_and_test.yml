@@ -94,3 +94,33 @@ jobs:
 
     - name: Build RelWithDebInfo
       run: cmake --build build --config RelWithDebInfo --target MathTests
+
+  build-arm64:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y cmake gcc
+
+    - name: Configure CMake
+      run: cmake -S . -B build
+
+    - name: Build debug
+      run: cmake --build build --config Debug --target MathTests
+
+    - name: Run doctest tests
+      run: ./build/MathTests
+
+    - name: Build release
+      run: cmake --build build --config Release --target MathTests
+
+    - name: Build MinSizeRel
+      run: cmake --build build --config MinSizeRel --target MathTests
+
+    - name: Build RelWithDebInfo
+      run: cmake --build build --config RelWithDebInfo --target MathTests
