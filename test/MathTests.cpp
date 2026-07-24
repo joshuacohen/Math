@@ -465,6 +465,14 @@ TEST_SUITE("Transforms") {
 }
 
 TEST_SUITE("Quaternions") {
+	TEST_CASE("Initialization") {
+		Quaternion q1(1.0f, 2.0f, 3.0f, 4.0f);
+
+		CHECK(q1.i == 1.0f);
+		CHECK(q1.j == 2.0f);
+		CHECK(q1.k == 3.0f);
+		CHECK(q1.r == 4.0f);
+	}
 }
 
 TEST_SUITE("Collision Detection") {
