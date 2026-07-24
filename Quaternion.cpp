@@ -4,6 +4,10 @@ namespace Math3D {
 	 Quaternion::Quaternion(float _i, float _j, float _k, float _r)
 	 	: i(_i), j(_j), k(_k), r(_r) {}
 
+
+	bool Quaternion::operator==(const Quaternion& q) const {
+		return i == q.i && j == q.j && k == q.k && r == q.r;
+	}
 	Quaternion Quaternion::operator*(float f) const {
 		return Quaternion(i * f, j * f, k * f, r * f);
 	}

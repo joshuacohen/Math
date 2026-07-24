@@ -12,6 +12,8 @@ namespace Math3D {
 
 		~Quaternion() = default;
 
+		bool operator==(const Quaternion& q) const;
+
 		Quaternion operator*(const Quaternion& q) const;
 		Quaternion operator*(float f) const;
 		Quaternion& operator*= (const Quaternion& q) { *this = *this * q; return *this; }
