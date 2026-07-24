@@ -473,6 +473,15 @@ TEST_SUITE("Quaternions") {
 		CHECK(q1.k == 3.0f);
 		CHECK(q1.r == 4.0f);
 	}
+
+	TEST_CASE("Equality") {
+		Quaternion q1(1.0f, 2.0f, 3.0f, 4.0f);
+		Quaternion q2(1.0f, 2.0f, 3.0f, 4.0f);
+		Quaternion q3(4.0f, 3.0f, 2.0f, 1.0f);
+
+		CHECK(q1 == q2);
+		CHECK(!(q1 == q3));
+	}
 }
 
 TEST_SUITE("Collision Detection") {
