@@ -4,12 +4,13 @@
 #include "doctest.h"
 #include "Matrix.h"
 #include "Transforms.h"
+#include "GeometricPrimitives.h"
 
 #include <numbers>
 using std::numbers::pi;
+using namespace Math3D;
 
 TEST_SUITE("Matrix") {
-	using namespace Math3D;
 
 	TEST_CASE("Construction") {
 		Vec3f a;
@@ -327,7 +328,6 @@ TEST_SUITE("Matrix") {
 		CHECK(mat.adjoint() == expected);
 	}
 
-	// TODO epsilon
 	// TODO adjoint property
 	TEST_CASE("Inverse") {
 		Mat3f before {
@@ -348,35 +348,57 @@ TEST_SUITE("Matrix") {
 		CHECK(Mat3f { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,}.nearly_equal(before * before.inverse()));
 	}
 
-	TEST_CASE("Transforms") {
+	TEST_CASE("Swizzle") {
+		CHECK(Vec3f(1.0f, 2.0f, 3.0f).swizzle<0, 1, 2>() == Vec3f(1.0f, 2.0f, 3.0f));
+		CHECK(Vec3f(1.0f, 2.0f, 3.0f).swizzle<2, 0, 1>() == Vec3f(3.0f, 1.0f, 2.0f));
+		CHECK(Mat3f {
+			1.0f, 2.0f, 3.0f,
+			4.0f, 5.0f, 6.0f,
+			7.0f, 8.0f, 9.0f,
+		}.swizzle<8, 7, 6, 5, 4, 3, 2, 1, 0>() == Mat3f {
+			9.0f, 8.0f, 7.0f,
+			6.0f, 5.0f, 4.0f,
+			3.0f, 2.0f, 1.0f,
+		});
+	}
+}
+
+TEST_SUITE("Transforms") {
+	Xformf rot90z {  // 90 degree rotation around Z
+		0.0f, -1.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f,
+	};
+
+	Xformf trans {
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 0.0f,
+	};
+
+	Xformf scaling {
+		2.0f, 0.0f, 0.0f,
+		0.0f, 3.0f, 0.0f,
+		0.0f, 0.0f, 4.0f,
+		0.0f, 0.0f, 0.0f,
+	};
+
+	TEST_CASE("Rotation") {
 		// Test rotation * translation
-		
-		Xformf rot90z {  // 90 degree rotation around Z
-			0.0f, -1.0f, 0.0f,
-			1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			0.0f, 0.0f, 0.0f,
-		};
 		CHECK(nearly_equal(rot90z, rotation(Vec3f(0.0f, 0.0f, 1.0f), 3.14159265f / 2.0f)));
+	}
 
-		Xformf trans {
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			1.0f, 0.0f, 0.0f,
-		};
-
+	TEST_CASE("Translation") {
 		CHECK(nearly_equal(trans, translation(Vec3f(1.0f, 0.0f, 0.0f))));
+	}
 
-		Xformf scaling {
-			2.0f, 0.0f, 0.0f,
-			0.0f, 3.0f, 0.0f,
-			0.0f, 0.0f, 4.0f,
-			0.0f, 0.0f, 0.0f,
-		};
-
+	TEST_CASE("Scaling") {
 		CHECK(nearly_equal(scaling, scale(Vec3f(2.0f, 3.0f, 4.0f))));
+	}
 
+	TEST_CASE("Composition") {
 		// rot90z * trans: rotation followed by translation
 		CHECK(rot90z * trans == Xformf {
 			0.0f, -1.0f, 0.0f,
@@ -438,5 +460,14 @@ TEST_SUITE("Matrix") {
 		};
 
 		CHECK(nearly_equal(model * view * projection, expected));
+	}
+}
+
+TEST_SUITE("Collision Detection") {
+	TEST_CASE("Half Space 3D") {
+		Plane plane { Vec3f(0.0f, 1.0f, 0.0f), 0.0f }; // horizontal plane at y=0
+		CHECK(HalfSpace3D(Vec3f(0.0f, 1.0f, 0.0f), plane) > 0); // above the plane
+		CHECK(HalfSpace3D(Vec3f(0.0f, -1.0f, 0.0f), plane) < 0); // below the plane
+		CHECK(HalfSpace3D(Vec3f(1.0f, 0.0f, 1.0f), plane) == 0); // on the plane
 	}
 }

@@ -35,8 +35,8 @@ namespace Math3D {
 	};
 
 	struct Plane {
-		Vec3f normal;
-		float distance;
+		Vec3f n;
+		float d;
 	};
 
 	struct Sphere {
@@ -58,4 +58,6 @@ namespace Math3D {
 		Segment axis;
 		float radius;
 	};
+
+	float HalfSpace3D(const Point& lhs, const Plane& rhs);
 }
