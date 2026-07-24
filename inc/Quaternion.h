@@ -13,6 +13,7 @@ namespace Math3D {
 		~Quaternion() = default;
 
 		bool operator==(const Quaternion& q) const;
+		bool nearly_equal(const Quaternion& q) const;
 
 		Quaternion operator*(const Quaternion& q) const;
 		Quaternion operator*(float f) const;
