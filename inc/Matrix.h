@@ -5,26 +5,13 @@
 #include <utility>
 #include <cmath>
 
-// This is some bullshit
-// #define EPSILON numeric_limits<T>::epsilon()
-#define EPSILON 1e-06F
+#include "3DMath.h"
 
 namespace Math3D {
 	using namespace std;
 
 	template <typename T, size_t W, size_t H>
 	struct Matrix;
-
-	// TODO should not live in Matrix.cpp long term
-	template <typename T>
-	constexpr T lerp(const T& a, const T& b, float t) {
-		return (1 - t) * a + t * b;
-	}
-
-	template <typename T>
-	bool nearly_equal(const T& lhs, const T& rhs) {
-		return abs(lhs - rhs) < EPSILON;
-	}
 
 	template<class T, class ... ArgTypes>
 	concept Assignable = requires() {
