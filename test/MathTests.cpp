@@ -249,7 +249,17 @@ TEST_SUITE("Matrix") {
 				1.0f, 2.0f, 3.0f,
 				4.0f, -5.0f, 6.0f,
 				7.0f, 8.0f, 9.0f,
-			}.trace() == 5.0f
+			}.trace() == Vec3f(1.0f, -5.0f, 9.0f)
+		);
+	}
+
+	TEST_CASE("Sum Trace") {
+		CHECK(
+			Mat3f {
+				1.0f, 2.0f, 3.0f,
+				4.0f, -5.0f, 6.0f,
+				7.0f, 8.0f, 9.0f,
+			}.sum_trace() == 5.0f
 		);
 	}
 

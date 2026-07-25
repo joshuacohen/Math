@@ -6,8 +6,7 @@ namespace Math3D {
 	 	: i(_i), j(_j), k(_k), r(_r) {}
 
 	Quaternion::Quaternion(const Xformf& rot) {
-		// TODO: Optimization pass
-		float trace = rot[0][0] + rot[1][1] + rot[2][2];
+		float trace = rot.sum_trace();
 		if (trace > 0.0f) {
 			float s = std::sqrt(trace + 1.0f) * 2.0f;
 			r = 0.25f * s;

@@ -187,8 +187,15 @@ namespace Math3D {
 			return transpose_impl(Seq_Row);
 		}
 
-		constexpr T trace() const requires (W == H) {
-			return trace_impl(Seq_Row);
+		using trace_t = conditional_t<(W <= H), row_t, col_t>;
+		static constexpr const auto Trace_Seq = make_index_sequence<trace_t::N>();
+
+		constexpr trace_t trace() const {
+			return trace_impl(Trace_Seq);
+		}
+
+		constexpr T sum_trace() const {
+			return sum_trace_impl(Trace_Seq);
 		}
 
 		constexpr Matrix<T, W, H - 1> remove_row(size_t i) const {
@@ -292,7 +299,12 @@ namespace Math3D {
 		}
 
 		template <size_t ... Seq>
-		constexpr T trace_impl(const index_sequence<Seq...>& seq) const {
+		constexpr trace_t trace_impl(const index_sequence<Seq...>&) const {
+			return trace_t(data[Seq][Seq] ...);
+		}
+
+		template <size_t ... Seq>
+		constexpr T sum_trace_impl(const index_sequence<Seq...>&) const {
 			return (0 + ... + data[Seq][Seq]);
 		}
 
