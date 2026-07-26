@@ -198,6 +198,14 @@ namespace Math3D {
 			return sum_trace_impl(Trace_Seq);
 		}
 
+		constexpr this_t reflect(const this_t& normal) const {
+			return *this - normal * (2 * dot(normal));
+		}
+
+		constexpr this_t reject(const this_t& dir) const {
+			return *this - dir * dot(dir);
+		}
+
 		constexpr Matrix<T, W, H - 1> remove_row(size_t i) const {
 			return remove_row_impl(i, Seq_Row);
 		}

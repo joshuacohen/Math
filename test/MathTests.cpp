@@ -277,6 +277,18 @@ TEST_SUITE("Matrix") {
 		);
 	}
 
+	TEST_CASE("Reflect") {
+		CHECK(
+			Vec3f(1.0f, 2.0f, 3.0f).reflect(Vec3f(0.0f, 1.0f, 0.0f)) == Vec3f(1.0f, -2.0f, 3.0f)
+		);
+	}
+
+	TEST_CASE("Reject") {
+		CHECK(
+			Vec3f(1.0f, 2.0f, 3.0f).reject(Vec3f(0.0f, 1.0f, 0.0f)) == Vec3f(1.0f, 0.0f, 3.0f)
+		);
+	}
+
 	TEST_CASE("Adjoint") {
 		Matrix<int, 3, 3> before {
 			-1, -2, -2,
