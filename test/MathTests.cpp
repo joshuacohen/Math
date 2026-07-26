@@ -513,6 +513,15 @@ TEST_SUITE("Quaternions") {
 			.nearly_equal(Quaternion(sqrt(0.5f), 0.0f, 0.0f, sqrt(0.5f)))
 		);
 	}
+
+	TEST_CASE("Linear Interpolation") {
+		CHECK(lerp(
+			Quaternion(0.0f, 0.0f, 0.0f, 1.0f),
+			Quaternion(1.0f, 0.0f, 0.0f, 0.0f), 
+			0.5f
+		).nearly_equal(Quaternion(0.5f, 0.0f, 0.0f, 0.5f)));
+	}
+
 	}
 }
 

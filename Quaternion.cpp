@@ -82,4 +82,8 @@ namespace Math3D {
 	Quaternion operator/(float f, const Quaternion& q) {
 		return q.operator/(f);
 	}
+
+	Quaternion lerp(const Quaternion& a, const Quaternion& b, float t) {
+		return a * (1.0f - t) + b * t;
+	}
 }
