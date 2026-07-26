@@ -522,6 +522,12 @@ TEST_SUITE("Quaternions") {
 		).nearly_equal(Quaternion(0.5f, 0.0f, 0.0f, 0.5f)));
 	}
 
+	TEST_CASE("Spherical Linear Interpolation") {
+		CHECK(slerp(
+			Quaternion(0.0f, 0.0f, 0.0f, 1.0f),
+			Quaternion(1.0f, 0.0f, 0.0f, 0.0f), 
+			0.5f
+		).nearly_equal(Quaternion(sqrt(2)/2, 0.0f, 0.0f, sqrt(2)/2)));
 	}
 }
 

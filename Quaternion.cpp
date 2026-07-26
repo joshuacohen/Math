@@ -86,4 +86,26 @@ namespace Math3D {
 	Quaternion lerp(const Quaternion& a, const Quaternion& b, float t) {
 		return a * (1.0f - t) + b * t;
 	}
+
+	// TODO optimization pass
+	Quaternion slerp(const Quaternion& a, const Quaternion& b, float t) {
+		// Compute the cosine of the angle between the two quaternions
+		float cos_theta = a.Dot(b);
+		Quaternion b_copy = b;
+		if (cos_theta < 0.0f) {
+			b_copy = b * -1.0f;
+			cos_theta = -cos_theta;
+		}
+
+		constexpr const float THRESHOLD = 0.9995f;
+		if (cos_theta > THRESHOLD) {
+			return lerp(a, b_copy, t).Normalize();
+		} else {
+			float angle = std::acos(cos_theta);
+			float sin_angle = std::sqrt(1.0f - cos_theta * cos_theta);
+			float w1 = std::sin((1.0f - t) * angle) / sin_angle;
+			float w2 = std::sin(t * angle) / sin_angle;
+			return (a * w1 + b_copy * w2).Normalize();
+		}
+	}
 }
