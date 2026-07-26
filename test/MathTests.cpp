@@ -8,7 +8,9 @@
 #include "GeometricPrimitives.h"
 
 #include <numbers>
-using std::numbers::pi;
+
+using namespace std;
+using numbers::pi;
 using namespace Math3D;
 
 TEST_SUITE("Matrix") {
@@ -508,9 +510,9 @@ TEST_SUITE("Quaternions") {
 	TEST_CASE("From Rotation Matrix") {
 		CHECK(
 			Quaternion(rotX(pi / 2.0f))
-			.nearly_equal
-			(Quaternion(std::sqrt(0.5f), 0.0f, 0.0f, std::sqrt(0.5f)))
+			.nearly_equal(Quaternion(sqrt(0.5f), 0.0f, 0.0f, sqrt(0.5f)))
 		);
+	}
 	}
 }
 
