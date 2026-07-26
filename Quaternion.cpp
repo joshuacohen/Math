@@ -1,5 +1,6 @@
 #include "Quaternion.h"
 #include "3DMath.h"
+#include <cmath>
 
 namespace Math3D {
 	 Quaternion::Quaternion(float _i, float _j, float _k, float _r)
@@ -77,6 +78,10 @@ namespace Math3D {
 
 	Quaternion operator/(const Quaternion& q, float f) {
 		return q.operator/(f);
+	}
+
+	float Quaternion::Mag() const {
+		return sqrt(Dot(*this));
 	}
 
 	Quaternion operator/(float f, const Quaternion& q) {

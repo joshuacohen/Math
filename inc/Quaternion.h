@@ -1,6 +1,5 @@
 #pragma once
 #include "Matrix.h"
-#include <cmath>
 
 namespace Math3D {
 	class Quaternion {
@@ -35,9 +34,9 @@ namespace Math3D {
 		Quaternion& operator-=(const Quaternion& q);
 		Quaternion& operator-=(float f);
 
-		Xformf ToRot();
+		Xformf ToRot() const;
 		float Dot(const Quaternion& q) const { return this->vals[0] * q.vals[0] + this->vals[1] * q.vals[1] + this->vals[2] * q.vals[2] + this->vals[3] * q.vals[3]; };
-		float Mag() const { return std::sqrt(this->Dot(*this)); }
+		float Mag() const;
 		Quaternion Normalize() const { return (*this) / Mag(); }
 		Quaternion Conjugate() const { return Quaternion(i, -j, -k, -r); }
 		
