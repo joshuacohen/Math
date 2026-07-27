@@ -141,4 +141,13 @@ namespace Math3D {
 			0.0f, 			0.0f, 			1.0f - offset * scale,	1.0f,
 		};
 	}
+
+	Xformf from_quaternion(const Quaternion& q) {
+		return Xformf(			
+			1.0f - 2.0f * (q.j * q.j + q.k * q.k), 2.0f * (q.i * q.j - q.k * q.r), 2.0f * (q.i * q.k + q.j * q.r),
+			2.0f * (q.i * q.j + q.k * q.r), 1.0f - 2.0f * (q.i * q.i + q.k * q.k), 2.0f * (q.j * q.k - q.i * q.r),
+			2.0f * (q.i * q.k - q.j * q.r), 2.0f * (q.j * q.k + q.i * q.r), 1.0f - 2.0f * (q.i * q.i + q.j * q.j),
+			0.0f, 0.0f, 0.0f
+		);
+	}
 }

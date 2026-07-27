@@ -62,6 +62,18 @@ TEST_SUITE("Matrix") {
 			1.0f, 1.0f, 1.0f,});
 	}
 
+	TEST_CASE("From Quaternion") {
+
+		CHECK(from_quaternion(Quaternion(0.0f, 0.0f, 0.0f, 1.0f)) == Xformf::identity());
+		CHECK(from_quaternion(Quaternion(0.0f, 1.0f, 0.0f, 0.0f)).nearly_equal(Xformf {
+			-1.0f,  0.0f,  0.0f,
+			 0.0f,  1.0f,  0.0f,
+			 0.0f,  0.0f, -1.0f
+		}));
+
+		CHECK(from_quaternion(Quaternion(1.0f, 0.0f, 0.0f, 0.0f)).nearly_equal(rotX(pi)));
+	}
+
 	TEST_CASE("Access") {
 		CHECK(Identity.row(2) == Vec3f(0.0f, 0.0f, 1.0f));
 		CHECK(Identity.col(1) == Matrix<float, 1, 4>(0.0f, 1.0f, 0.0f, 0.0f));
