@@ -4,5 +4,5 @@
 - Row major
 - Left handed
 - Y up
-- Depth 0-1
+- Hi-Z (depth 0-1)
 - With angles expressed in radians
