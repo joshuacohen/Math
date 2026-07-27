@@ -38,13 +38,11 @@ namespace Math3D {
 			return this_t(std::array<T, N>{ ((Seq / W == Seq % W) ? (1) : (0))... });
 		}
 
-		Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>);
-
-		Matrix() : arr{0} {}
-
-		Matrix(const T& val) {arr.fill(val); }
-
+		constexpr Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>);
+		constexpr Matrix() : arr{0} {}
+		constexpr Matrix(const T& val) {arr.fill(val); }
 		constexpr Matrix(const row_t (&vecs)[H]) { vector_constructor_impl(vecs, Seq_Col); }
+		constexpr Matrix(const array<T, N>& _arr) : arr(_arr) {}
 
 		template <typename ... ArgTypes>
 		constexpr Matrix(ArgTypes ... args) requires (Assignable<T, ArgTypes...>): arr{args...} { static_assert(sizeof...(args) <= N); }
@@ -402,5 +400,5 @@ namespace Math3D {
 	constexpr const Xformf Identity = Xformf::identity();
 
 	template <typename T, size_t W, size_t H>
-	Matrix<T, W, H>::Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>) {*this = Identity;}
+	constexpr Matrix<T, W, H>::Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>) {*this = Identity;}
 }
