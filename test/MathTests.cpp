@@ -1,4 +1,5 @@
 #include <string>
+#include <sstream>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
@@ -397,6 +398,16 @@ TEST_SUITE("Matrix") {
 			6.0f, 5.0f, 4.0f,
 			3.0f, 2.0f, 1.0f,
 		});
+	}
+
+	TEST_CASE("Operator<<") {
+		stringstream vec, mat;
+
+		vec << Vec3f(1.0f, 0.0f, 0.0f);
+		CHECK(vec.str() == "1, 0, 0");
+
+		mat << Xformf::identity();
+		CHECK(mat.str() =="1, 0, 0\n0, 1, 0\n0, 0, 1\n0, 0, 0");
 	}
 }
 

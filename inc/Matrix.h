@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <utility>
 #include <cmath>
+#include <ostream>
 
 #include "3DMath.h"
 
@@ -46,7 +47,7 @@ namespace Math3D {
 
 		template <typename ... ArgTypes>
 		constexpr Matrix(ArgTypes ... args) requires (Assignable<T, ArgTypes...>): arr{args...} { static_assert(sizeof...(args) <= N); }
-		constexpr Matrix(const array<T, N>& _arr) : arr(_arr) {}
+
 		constexpr this_t& operator= (const this_t& val) { arr = val.arr; return *this; }
 		constexpr bool operator==(const this_t& val) const { return arr == val.arr; }
 		constexpr conditional_t<H == 1, T, row_t>& operator[](size_t i) { return vec[i]; }
@@ -54,6 +55,9 @@ namespace Math3D {
 		constexpr this_t operator+(const T& val) const { return scalar_add_impl(val, Seq_Data); }
 		constexpr this_t operator*(const T& val) const { return scalar_mul_impl(val, Seq_Data); }
 		constexpr this_t operator/(const T& val) const { return scalar_div_impl(val, Seq_Data); }
+		
+		template <typename _T, size_t _W, size_t _H>
+		friend std::ostream& operator<<(std::ostream& os, const this_t& mat);
 
 		constexpr bool nearly_equal(const this_t& rhs) const {
 			return nearly_equal_impl(rhs, Seq_Data);
@@ -401,4 +405,14 @@ namespace Math3D {
 
 	template <typename T, size_t W, size_t H>
 	constexpr Matrix<T, W, H>::Matrix() requires(is_same_v<this_t, Matrix<float, 3, 4>>) {*this = Identity;}
+
+	template <typename T, size_t W, size_t H>
+	std::ostream& operator<<(std::ostream& os, const Matrix<T, W, H>& mat) {
+		return ostream_impl(os, mat, mat.Seq_Data);
+	}
+
+	template <typename T, size_t W, size_t H, size_t ... Seq>
+	std::ostream& ostream_impl(std::ostream& os, const Matrix<T, W, H>& mat, const index_sequence<Seq...>&) {
+		return ((os << mat.arr[Seq] << (Seq % W < W - 1 ? ", " : (Seq < mat.N - 1 ? "\n" : ""))), ...);
+	}
 }
