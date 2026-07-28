@@ -6,22 +6,15 @@ For completed work, see [src/math/CHANGELOG.md](src/math/CHANGELOG.md)
 
 | Feature | Priority | Est. Time | Notes |
 |---------|----------|-----------|-------|
-| **Perspective/Orthographic Projection** | CRITICAL | 1-2 hrs | Camera setup builders |
-| **LookAt (View Matrix)** | CRITICAL | 1 hr | Standard camera construction |
-| **Vector Distance/Angle** | HIGH | 30 min | Euclidean distance, angle between vectors |
 | **Euler Angles ↔ Quaternion** | HIGH | 1.5 hrs | Serialization, editor integration |
-| **Quaternion from Rotation Matrix** | HIGH | 1 hr | `Quaternion(const Xformf&)` implementation |
-| **Quaternion Lerp** | MEDIUM | 30 min | Linear interpolation (simpler than Slerp) |
 | **Geometric Primitives** | MEDIUM | 2 hrs | Plane, Ray, AABB structs + utilities |
 | **ConstBuffer Integration** | MEDIUM | 1 hr | Link projection matrices to renderers |
 
-**Estimated remaining time**: ~6 hours (60% of original plan)
-
 ## Remaining Bugs & Robustness Issues
 
-- [ ] Quaternion from matrix: needs trace method for stable conversion
+- [X] Quaternion from matrix: needs trace method for stable conversion
 - [ ] Slerp robustness: add shortest-path safeguard (negate if dot < 0)
-- [ ] Vector ops: missing reflection, rejection methods
+- [X] Vector ops: missing reflection, rejection methods
 
 ## Implementation Checklist
 
@@ -35,10 +28,10 @@ For completed work, see [src/math/CHANGELOG.md](src/math/CHANGELOG.md)
 - [X] Tests for LookAt (camera pointing checks)
 
 ### Phase 3: Quaternion Enhancements
-- [ ] `Quaternion(const Xformf&)` constructor — from rotation matrix via trace
+- [X] `Quaternion(const Xformf&)` constructor — from rotation matrix via trace
 - [ ] `Quaternion::FromEuler(pitch, yaw, roll, order)` — Euler to quat
 - [ ] `EulerAngles Quaternion::ToEuler()` — quat to Euler, gimbal lock handling
-- [ ] `Quaternion::Lerp(Quaternion, float)` — linear interpolation + normalize
+- [X] `Quaternion::Lerp(Quaternion, float)` — linear interpolation + normalize
 - [ ] Slerp robustness: shortest-path correction, input normalization
 - [ ] Tests: Euler round-trip (error < 0.001 rad), Lerp/Slerp correctness
 
@@ -52,7 +45,7 @@ For completed work, see [src/math/CHANGELOG.md](src/math/CHANGELOG.md)
 
 ### Phase 5: Integration & Polish
 - [ ] Update ConstBuffer to use Perspective() and LookAt()
-- [ ] D3D12App/VKApp: replace hardcoded transforms with builders
+- [X] D3D12App/VKApp: replace hardcoded transforms with builders
 - [ ] Document matrix layout (row-major vs column-major for D3D12/Vulkan)
 - [ ] Validate HLSL constant buffer layout matches C++
 
@@ -134,7 +127,6 @@ Captured optimization opportunities in `inc/Matrix.h` that do not change behavio
 
 | Optimization | Priority | Location | Status |
 |---|---|---|---|
-| Replace `pow(x, 2)` with `x * x` in `magnitude_impl` | HIGH | `Matrix.h` magnitude_impl | Done |
 | Remove row/col temporary construction in generic matrix multiply | HIGH | `Matrix.h` matrix_mul_impl | Pending |
 | Change `normalize()` to reciprocal multiply | MEDIUM | `Matrix.h` normalize | Pending |
 | Specialized `3x3`/`4x4` determinant and inverse | MEDIUM | `Matrix.h` determinant/adjoint/inverse | Pending |
