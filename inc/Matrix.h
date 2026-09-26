@@ -63,6 +63,10 @@ namespace Math3D {
 			return nearly_equal_impl(rhs, Seq_Data);
 		}
 
+		this_t operator+=(const this_t& val) const {
+			return *this + val;
+		}
+
 		this_t& operator+=(const T& val) {
 			this_t& _this = *this;
 			_this = _this + val;
