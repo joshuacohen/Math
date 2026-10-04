@@ -93,6 +93,10 @@ TEST_SUITE("Matrix") {
 
 	TEST_CASE("Vector addition") {
 		CHECK(Vec3f(1.0f, 1.0f, 1.0f) + Vec3f{2.0f, 2.0f, 2.0f} == Vec3f{3.0f, 3.0f, 3.0f});
+
+		Vec3f result(2.0f, 4.0f, 6.0f);
+		result += Vec3f(1.0f, 2.0f, 3.0f);
+		CHECK(result == Vec3f(3.0f, 6.0f, 9.0f));
 	}
 
 	TEST_CASE("Vector subtraction") {
