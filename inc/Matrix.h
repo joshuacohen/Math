@@ -84,6 +84,12 @@ namespace Math3D {
 			return val;
 		}
 
+		this_t operator*=(const this_t& val) {
+			this_t& _this = *this;
+			_this = _this * val;
+			return _this;
+		}
+
 		constexpr this_t operator+(const this_t& val) const {
 			return vector_add_impl(val, Seq_Data);
 		}
