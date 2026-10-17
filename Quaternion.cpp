@@ -122,4 +122,11 @@ namespace Math3D {
 			return (a * w1 + b_copy * w2).Normalize();
 		}
 	}
+
+	bool nearly_equal(const Quaternion& a, const Quaternion& b) {
+		return nearly_equal(a.i, b.i) 
+			&& nearly_equal(a.j, b.j) 
+			&& nearly_equal(a.k, b.k) 
+			&& nearly_equal(a.r, b.r);
+	}
 }
