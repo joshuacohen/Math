@@ -50,4 +50,6 @@ namespace Math3D {
 	Quaternion slerp(const Quaternion& a, const Quaternion& b, float t);
 	Quaternion operator/(const Quaternion& q, float f);
 	Quaternion operator/(float f, const Quaternion& q);
+
+	inline Quaternion identity(0.0f, 0.0f, 0.0f, 1.0f);
 }
