@@ -6,6 +6,15 @@ namespace Math3D {
 	 Quaternion::Quaternion(float _i, float _j, float _k, float _r)
 	 	: i(_i), j(_j), k(_k), r(_r) {}
 
+		Quaternion::Quaternion(const Vec3f& axis, float angle) {
+			float half_angle = angle * 0.5f;
+			float s = sin(half_angle);
+			i = axis[0] * s;
+			j = axis[1] * s;
+			k = axis[2] * s;
+			r = cos(half_angle);
+		}
+
 	Quaternion::Quaternion(const Xformf& rot) {
 		float trace = rot.sum_trace();
 		if (trace > 0.0f) {
