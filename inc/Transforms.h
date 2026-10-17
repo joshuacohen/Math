@@ -3,7 +3,7 @@
 #include <cmath>
 
 namespace Math3D {
-	class Quaternion;
+	struct Quaternion;
 
 	Xformf rotation(const Vec3f& axis, float angle);
 	Xformf translation(const Vec3f& offset);

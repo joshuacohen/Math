@@ -2,8 +2,7 @@
 #include "Matrix.h"
 
 namespace Math3D {
-	class Quaternion {
-	public:
+	struct Quaternion {
 		Quaternion() = default;
 		Quaternion(float _i, float _j, float _k, float _r);
 		Quaternion(const Vec3f& axis, float angle);
