@@ -165,6 +165,22 @@ TEST_SUITE("Matrix") {
 		});
 	}
 
+	TEST_CASE("Operator *= (Matrix)") {
+		Matrix<int, 3, 3>  a {
+			1, 2, 3,
+			3, 2, 1,
+			1, 2, 3
+		};
+
+		Matrix<int, 3, 3> b {
+		   4, 5, 6,
+		   6, 5, 4,
+		   4, 6, 5
+		};
+
+		CHECK((a *= b) == Matrix<int, 3, 3> {28, 33, 29, 28, 31, 31, 28, 33, 29});
+	}
+
 	TEST_CASE("Scalar division") {
 		CHECK(Vec3f(3.0f, 6.0f, 9.0f) / 3.0f == Vec3f(1.0f, 2.0f, 3.0f));
 	}
