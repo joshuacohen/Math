@@ -523,6 +523,9 @@ TEST_SUITE("Quaternions") {
 		CHECK(q1.j == 2.0f);
 		CHECK(q1.k == 3.0f);
 		CHECK(q1.r == 4.0f);
+
+		Quaternion q2(Vec3f(1.0f, 0.0f, 0.0f), pi / 2.0f); // axis-angle constructor
+		CHECK(q2.nearly_equal(Quaternion(sqrt(0.5f), 0.0f, 0.0f, sqrt(0.5f))));
 	}
 
 	TEST_CASE("Equality") {
