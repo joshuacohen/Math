@@ -7,6 +7,7 @@
 #include "Quaternion.h"
 #include "Transforms.h"
 #include "GeometricPrimitives.h"
+#include "Quaternion.h"
 
 #include <numbers>
 
@@ -528,6 +529,15 @@ TEST_SUITE("Transforms") {
 		};
 
 		CHECK(nearly_equal(model * view * projection, expected));
+	}
+
+	TEST_CASE("From Quaternion") {
+		CHECK(from_quaternion(Quaternion(0.0f, 0.0f, 0.0f, 1.0f)) == Xformf::identity());
+		CHECK(from_quaternion(Quaternion(0.0f, 1.0f, 0.0f, 0.0f)).nearly_equal(Xformf {
+			1.0f,  0.0f,  0.0f,
+			0.0f, -1.0f,  0.0f,
+			0.0f,  0.0f, -1.0f
+		}));
 	}
 }
 
