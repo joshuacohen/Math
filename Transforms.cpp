@@ -91,6 +91,22 @@ namespace Math3D {
 		return rotation(_rotation) * translation(_translation) * scale(_scale);
 	}
 
+	void decompose(const Xformf& xf, Quaternion& out_rotation, Vec3f& out_translation, Vec3f& out_scale) {
+		out_translation = Vec3f(xf[3]);
+
+		out_scale = Vec3f(
+			Vec3f(xf[0]).length(),
+			Vec3f(xf[1]).length(),
+			Vec3f(xf[2]).length()
+		);
+		
+		Xformf rotMat = xf;
+		rotMat[0] /= out_scale[0];
+		rotMat[1] /= out_scale[1];
+		rotMat[2] /= out_scale[2];
+		out_rotation = Quaternion(rotMat);
+	}
+
 	float distance(const Vec3f& a, const Vec3f& b) {
 		return (a - b).length();
 	}
