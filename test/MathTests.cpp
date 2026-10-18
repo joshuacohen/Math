@@ -484,6 +484,34 @@ TEST_SUITE("Transforms") {
 		});
 	}
 
+	TEST_CASE("Decomposition") {
+		Xformf a {
+			0.0f, -1.0f, 0.0f,
+			1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,
+			1.0f, 0.0f, 0.0f,
+		};
+		Quaternion localRot;
+		Vec3f localTrans, localScale;
+
+		decompose(a, localRot, localTrans, localScale);
+		CHECK(nearly_equal(localRot, rot90z));
+
+		CHECK(nearly_equal(localTrans, Vec3f(1.0f, 0.0f, 0.0f)));
+
+		Xformf b {
+			0.0f, -3.0f, 0.0f,
+			2.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 4.0f,
+			2.0f, 0.0f, 0.0f,
+		};
+		decompose(b, localRot, localTrans, localScale);
+		
+		CHECK(nearly_equal(localRot, rot90z));
+		CHECK(nearly_equal(localTrans, Vec3f(2.0f, 0.0f, 0.0f)));
+		CHECK(nearly_equal(localScale, Vec3f(2.0f, 3.0f, 4.0f)));
+	}
+
 	TEST_CASE("Look At") {
 		CHECK(nearly_equal(look_at(translation(Vec3f{0.0f, 0.0f, -1.0f}), Identity), Xformf {
 			1.0f, 0.0f, 0.0f,
