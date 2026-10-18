@@ -575,6 +575,10 @@ TEST_SUITE("Quaternions") {
 			0.5f
 		).nearly_equal(Quaternion(sqrt(2)/2, 0.0f, 0.0f, sqrt(2)/2)));
 	}
+
+	TEST_CASE("To Euler") {
+		CHECK(Quaternion(rotX(3.14159265f / 2.0f)).Euler().nearly_equal(Vec3f(3.14159265f / 2.0f, 0.0f, 0.0f)));
+	}
 }
 
 TEST_SUITE("Collision Detection") {
