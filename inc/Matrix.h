@@ -73,6 +73,12 @@ namespace Math3D {
 			return _this;
 		}
 
+		this_t& operator/=(const T& val) {
+			this_t& _this = *this;
+			_this = _this / val;
+			return _this;
+		}
+
 		this_t& operator++() {
 			return *this += 1;
 		}
