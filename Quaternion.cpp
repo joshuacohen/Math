@@ -123,6 +123,15 @@ namespace Math3D {
 		}
 	}
 
+	// ZYX Sequence
+	Vec3f Quaternion::Euler() const {
+		return Vec3f {
+			atan2(2.0f * (r * i + j * k), 1.0f - 2.0f * (i * i + j * j)),
+			asin(2.0f * (r * j - k * i)),
+			atan2(2.0f * (r * k + i * j), 1.0f - 2.0f * (j * j + k * k))
+		};
+	}
+
 	bool nearly_equal(const Quaternion& a, const Quaternion& b) {
 		return nearly_equal(a.i, b.i) 
 			&& nearly_equal(a.j, b.j) 

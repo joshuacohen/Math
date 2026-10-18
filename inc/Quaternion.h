@@ -37,6 +37,8 @@ namespace Math3D {
 		float Mag() const;
 		Quaternion Normalize() const { return (*this) / Mag(); }
 		Quaternion Conjugate() const { return Quaternion(i, -j, -k, -r); }
+
+		Vec3f Euler() const;
 		
 		union {
 			float vals[4];
@@ -49,6 +51,7 @@ namespace Math3D {
 	Quaternion slerp(const Quaternion& a, const Quaternion& b, float t);
 	Quaternion operator/(const Quaternion& q, float f);
 	Quaternion operator/(float f, const Quaternion& q);
+
 	bool nearly_equal(const Quaternion& a, const Quaternion& b);
 
 	inline Quaternion identity(0.0f, 0.0f, 0.0f, 1.0f);
