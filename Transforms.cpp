@@ -94,17 +94,19 @@ namespace Math3D {
 	void decompose(const Xformf& xf, Quaternion& out_rotation, Vec3f& out_translation, Vec3f& out_scale) {
 		out_translation = Vec3f(xf[3]);
 
-		out_scale = Vec3f(
-			Vec3f(xf[0]).length(),
-			Vec3f(xf[1]).length(),
-			Vec3f(xf[2]).length()
-		);
-		
-		Xformf rotMat = xf;
-		rotMat[0] /= out_scale[0];
-		rotMat[1] /= out_scale[1];
-		rotMat[2] /= out_scale[2];
-		out_rotation = Quaternion(rotMat);
+		// extract scale from column lengths
+		out_scale[0] = Vec3f(xf[0][0], xf[1][0], xf[2][0]).length();
+		out_scale[1] = Vec3f(xf[0][1], xf[1][1], xf[2][1]).length();
+		out_scale[2] = Vec3f(xf[0][2], xf[1][2], xf[2][2]).length();
+
+		Xformf rot {
+			xf[0][0] / out_scale[0], xf[0][1] / out_scale[1], xf[0][2] / out_scale[2],
+			xf[1][0] / out_scale[0], xf[1][1] / out_scale[1], xf[1][2] / out_scale[2],
+			xf[2][0] / out_scale[0], xf[2][1] / out_scale[1], xf[2][2] / out_scale[2],
+			0.0f, 0.0f, 0.0f,
+		};
+
+		out_rotation = Quaternion(rot);
 	}
 
 	float distance(const Vec3f& a, const Vec3f& b) {
