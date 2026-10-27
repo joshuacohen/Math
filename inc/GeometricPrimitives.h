@@ -59,5 +59,12 @@ namespace Math3D {
 		float radius;
 	};
 
+	struct OBB {
+		Point center;
+		Vec3f axes[3];
+		Vec3f halfwidths;
+		
+	};
+
 	float HalfSpace3D(const Point& lhs, const Plane& rhs);
 }
