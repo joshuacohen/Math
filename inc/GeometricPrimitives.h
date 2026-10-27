@@ -66,5 +66,9 @@ namespace Math3D {
 		
 	};
 
+	struct Frustum {
+		Plane planes[6];
+	};
+
 	float HalfSpace3D(const Point& lhs, const Plane& rhs);
 }
