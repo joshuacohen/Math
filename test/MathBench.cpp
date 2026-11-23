@@ -39,4 +39,50 @@ TEST_SUITE("Benchmarks") {
 			}
 		});
 	}
+
+	TEST_CASE("Multiplication") {
+		Mat4f a;
+		Mat4f b;
+
+		DirectX::XMMATRIX xa = DirectX::XMMatrixIdentity();
+		DirectX::XMMATRIX xb = DirectX::XMMatrixIdentity();
+
+		constexpr size_t BatchSize = 1000;
+		ankerl::nanobench::Bench bench;
+		bench.relative(true).batch(BatchSize).unit("multiply");
+
+		bench.run("DXMath Equivalent", [&] {
+			auto acc = xa;
+			ankerl::nanobench::doNotOptimizeAway(xa);
+			ankerl::nanobench::doNotOptimizeAway(xb);
+			ankerl::nanobench::doNotOptimizeAway(acc);
+
+			for (size_t i = 0; i < BatchSize; ++i) {
+				acc = DirectX::XMMatrixMultiply(acc, xb);
+			}
+		});
+
+		bench.run("Multiply 2 Matrices", [&] {
+			auto acc = a;
+			ankerl::nanobench::doNotOptimizeAway(a);
+			ankerl::nanobench::doNotOptimizeAway(b);
+			ankerl::nanobench::doNotOptimizeAway(acc);
+
+			for (size_t i = 0; i < BatchSize; ++i) {
+				acc = acc * b;
+			}
+		});
+
+		Xformf c;
+		
+		bench.run("Linear Transform Specialization", [&] {
+			auto acc = c;
+			ankerl::nanobench::doNotOptimizeAway(c);
+			ankerl::nanobench::doNotOptimizeAway(acc);
+
+			for (size_t i = 0; i < BatchSize; ++i) {
+				acc = acc * c;
+			}
+		});
+	}
 }
