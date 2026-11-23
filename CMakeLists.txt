@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 include(FetchContent)
+
 set(DOCTEST_VERSION master)
 FetchContent_Declare(doctest
 	URL  https://raw.githubusercontent.com/doctest/doctest/${DOCTEST_VERSION}/doctest/doctest.h
@@ -12,11 +13,18 @@ FetchContent_Declare(doctest
 )
 FetchContent_MakeAvailable(doctest)
 
+set(NANOBENCH_VERSION master)
+FetchContent_Declare(nanobench
+	URL  https://raw.githubusercontent.com/martinus/nanobench/${NANOBENCH_VERSION}/src/include/nanobench.h
+	DOWNLOAD_NO_EXTRACT TRUE
+)
+FetchContent_MakeAvailable(nanobench)
+
 project(Math)
 	add_library(Math Transforms.cpp Quaternion.cpp Collision.cpp)
 	target_include_directories(Math PUBLIC inc)
 
-	add_executable(MathTests test/MathTests.cpp)
-	target_include_directories(MathTests PUBLIC ${doctest_SOURCE_DIR})
+	add_executable(MathTests test/MathTests.cpp test/MathBench.cpp)
+	target_include_directories(MathTests PUBLIC ${doctest_SOURCE_DIR} ${nanobench_SOURCE_DIR})
 	target_link_libraries(MathTests Math)
 	set_property(TARGET MathTests PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
