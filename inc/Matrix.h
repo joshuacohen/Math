@@ -284,7 +284,7 @@ namespace Math3D {
 
 		template <class _T, size_t _W, size_t _H, size_t ... Seq>
 		constexpr T inner_product_impl(const Matrix<_T, _W, _H>& val, const index_sequence<Seq...>&) const {
-			return (0 + ... + (arr[Seq] * val.arr[Seq]));
+			return ((arr[Seq] * val.arr[Seq]) + ...);
 		}
 
 		template <class _T, size_t _W, size_t _H, size_t ... Seq>
@@ -321,7 +321,7 @@ namespace Math3D {
 
 		template <size_t ... Seq>
 		constexpr T magnitude_impl(const index_sequence<Seq...>&) const {
-			return std::sqrt((0 + ... + static_cast<T>(arr[Seq] * arr[Seq])));
+			return std::sqrt((static_cast<T>(arr[Seq] * arr[Seq]) + ...));
 		}
 
 		template <size_t ... Seq>
@@ -331,7 +331,7 @@ namespace Math3D {
 
 		template <size_t ... Seq>
 		constexpr T sum_trace_impl(const index_sequence<Seq...>&) const {
-			return (0 + ... + data[Seq][Seq]);
+			return (data[Seq][Seq] + ...);
 		}
 
 		template<size_t ... ColSeq>
